@@ -1,0 +1,18 @@
+{
+  "name": "bk-group-shoes-server",
+  "version": "1.0.0",
+  "description": "B & K Group shoe store API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.7",
+    "openai": "^6.22.0",
+    "pdfkit": "^0.14.0"
+  }
+}

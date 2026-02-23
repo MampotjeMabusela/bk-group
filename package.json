@@ -1,0 +1,17 @@
+{
+  "name": "bk-group-website",
+  "version": "1.0.0",
+  "description": "B & K Group – PHUSHA S'MOKOLO shoe store",
+  "private": true,
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "build": "echo 'No build step'"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "pdfkit": "^0.14.0"
+  }
+}

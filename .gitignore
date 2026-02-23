@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Environment and secrets
+.env
+server/.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
+
+# Logs and OS
+*.log
+.DS_Store
+Thumbs.db

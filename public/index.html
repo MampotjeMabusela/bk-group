@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>B & K Group – PHUSHA S'MOKOLO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-hero-bg" role="presentation"></div>
+    <div class="header-bg"></div>
+    <div class="header-inner">
+      <a href="#" data-page="shop" class="logo-link" aria-label="B & K Group home">
+        <img src="/images/logo.png" alt="B & K Group – PHUSHA S'MOKOLO" class="logo-img" />
+      </a>
+      <p class="tagline">PHUSHA S'MOKOLO</p>
+      <nav class="nav">
+        <a href="#" data-page="shop" class="nav-link active">Shop</a>
+        <a href="#" data-page="testimonials" class="nav-link">Testimonials</a>
+        <a href="#" data-page="feedback" class="nav-link">Feedback</a>
+        <a href="#" data-page="cart" class="nav-link cart-link">
+          Cart <span class="cart-count" id="cartCount">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="trust-bar" role="complementary" aria-label="Why choose us">
+      <span class="trust-item"><span class="trust-icon" aria-hidden="true">◆</span> Genuine leather</span>
+      <span class="trust-item"><span class="trust-icon" aria-hidden="true">◆</span> Made in South Africa</span>
+      <span class="trust-item"><span class="trust-icon" aria-hidden="true">◆</span> Free quotation</span>
+      <span class="trust-item"><span class="trust-icon" aria-hidden="true">◆</span> Reliable delivery</span>
+    </div>
+    <section id="page-shop" class="page active">
+      <div class="products-header">
+        <h2>Our Shoes</h2>
+        <div class="filter-wrap">
+          <label for="categoryFilter">Category</label>
+          <select id="categoryFilter">
+            <option value="">All</option>
+            <option value="vellies">Vellies</option>
+            <option value="slip-on">Slip-Ons</option>
+            <option value="boots">Boots</option>
+            <option value="sandals">Sandals</option>
+          </select>
+        </div>
+      </div>
+      <ul class="product-grid" id="productGrid"></ul>
+    </section>
+
+    <section id="page-cart" class="page">
+      <h2>Your Cart</h2>
+      <div class="cart-empty" id="cartEmpty">Your cart is empty.</div>
+      <ul class="cart-list" id="cartList"></ul>
+      <div class="cart-footer" id="cartFooter" hidden>
+        <p class="cart-total">Total: <strong id="cartTotal">ZAR 0.00</strong></p>
+        <button type="button" class="btn btn-primary" id="checkoutBtn">Get quotation</button>
+      </div>
+    </section>
+
+    <section id="page-checkout" class="page">
+      <h2>Checkout</h2>
+      <form id="checkoutForm" class="checkout-form">
+        <div class="form-group">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" required />
+        </div>
+        <div class="form-group">
+          <label for="address">Delivery address</label>
+          <textarea id="address" name="address" rows="3" required></textarea>
+        </div>
+        <div class="checkout-summary" id="checkoutSummary"></div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="backToCart">Back to Cart</button>
+          <button type="submit" class="btn btn-primary" id="submitQuotation">Download quotation (PDF)</button>
+        </div>
+      </form>
+      <div class="order-success" id="orderSuccess" hidden>
+        <p class="success-title">Quotation downloaded</p>
+        <p>Your PDF quotation has been saved. To complete your order:</p>
+        <ul class="success-instructions">
+          <li>Email the quotation to <a href="mailto:bandkgroupptyltd@outlook.com">bandkgroupptyltd@outlook.com</a></li>
+          <li>WhatsApp it to <a href="https://wa.me/27782376257">+27 78 237 6257</a></li>
+          <li>Call <a href="tel:+27782376257">+27 78 237 6257</a></li>
+          <li>Visit us at Moreleta Corner, Cnr Garsfontein Rd &amp; Rubenstain Dr, Moreleta Park, Pretoria</li>
+        </ul>
+        <p>We will confirm availability and payment details.</p>
+        <a href="#" data-page="shop" class="btn btn-primary">Continue Shopping</a>
+      </div>
+    </section>
+
+    <section id="page-testimonials" class="page">
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-subtitle">Real feedback from people who love their B & K Group shoes</p>
+      <div class="testimonials-grid" id="testimonialsGrid">
+        <article class="testimonial-card">
+          <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <blockquote class="testimonial-quote">The vellies I ordered fit perfectly and the leather quality is outstanding. Got my quotation the same day and delivery was quick. Will definitely order again.</blockquote>
+          <footer class="testimonial-author">
+            <strong>Thabo M.</strong>
+            <span>Johannesburg</span>
+          </footer>
+        </article>
+        <article class="testimonial-card">
+          <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <blockquote class="testimonial-quote">Bought the genuine leather sandals for my mom—she loves them! Great value for money and true South African craftsmanship. Highly recommend B & K Group.</blockquote>
+          <footer class="testimonial-author">
+            <strong>Nomvula K.</strong>
+            <span>Pretoria</span>
+          </footer>
+        </article>
+        <article class="testimonial-card">
+          <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <blockquote class="testimonial-quote">My Chelsea boots are still going strong after a year. The team was helpful with sizing and the PDF quotation made ordering so easy. Professional from start to finish.</blockquote>
+          <footer class="testimonial-author">
+            <strong>David L.</strong>
+            <span>Cape Town</span>
+          </footer>
+        </article>
+        <article class="testimonial-card">
+          <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <blockquote class="testimonial-quote">Finally found quality slip-ons that don’t break the bank. Fast response on WhatsApp and the shoes arrived well packed. PHUSHA S'MOKOLO delivers.</blockquote>
+          <footer class="testimonial-author">
+            <strong>Lerato S.</strong>
+            <span>Durban</span>
+          </footer>
+        </article>
+        <article class="testimonial-card">
+          <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <blockquote class="testimonial-quote">Ordered Hydrade Vellies for the whole family. Beautiful finish and true to size. The quotation process was smooth and the team answered all my questions. Top service!</blockquote>
+          <footer class="testimonial-author">
+            <strong>Sarah N.</strong>
+            <span>Bloemfontein</span>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <section id="page-feedback" class="page">
+      <h2 class="section-title">Send Us Your Feedback</h2>
+      <p class="section-subtitle">We’d love to hear from you—suggestions, reviews, or questions</p>
+      <form id="feedbackForm" class="feedback-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="feedbackName">Your name <span class="required">*</span></label>
+            <input type="text" id="feedbackName" name="name" required placeholder="e.g. John Smith" />
+          </div>
+          <div class="form-group">
+            <label for="feedbackEmail">Email <span class="required">*</span></label>
+            <input type="email" id="feedbackEmail" name="email" required placeholder="you@example.com" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Rating</label>
+          <div class="rating-stars" role="group" aria-label="Rate your experience">
+            <button type="button" class="star-btn" data-rating="1" aria-label="1 star">★</button>
+            <button type="button" class="star-btn" data-rating="2" aria-label="2 stars">★</button>
+            <button type="button" class="star-btn" data-rating="3" aria-label="3 stars">★</button>
+            <button type="button" class="star-btn" data-rating="4" aria-label="4 stars">★</button>
+            <button type="button" class="star-btn" data-rating="5" aria-label="5 stars">★</button>
+          </div>
+          <input type="hidden" id="feedbackRating" name="rating" value="5" />
+        </div>
+        <div class="form-group">
+          <label for="feedbackSubject">Subject</label>
+          <select id="feedbackSubject" name="subject">
+            <option value="general">General feedback</option>
+            <option value="product">Product review</option>
+            <option value="order">Order / delivery</option>
+            <option value="suggestion">Suggestion</option>
+            <option value="complaint">Complaint</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="feedbackMessage">Message <span class="required">*</span></label>
+          <textarea id="feedbackMessage" name="message" rows="5" required placeholder="Tell us what you think..."></textarea>
+        </div>
+        <div class="feedback-actions">
+          <button type="submit" class="btn btn-primary" id="feedbackSubmit">Send feedback</button>
+        </div>
+        <div class="feedback-message" id="feedbackMessageEl" role="status" aria-live="polite" hidden></div>
+      </form>
+    </section>
+
+    <!-- Terms and Conditions page -->
+    <section id="page-terms" class="page">
+      <div class="terms-content">
+        <h2 class="section-title">Terms and Conditions</h2>
+        <p class="terms-updated">Last updated: February 2025</p>
+
+        <h3>1. Introduction</h3>
+        <p>Welcome to B & K Group (PHUSHA S'MOKOLO). These Terms and Conditions govern your use of our website and the purchase of footwear and related products. By using this site or placing an order, you agree to these terms.</p>
+
+        <h3>2. Company information</h3>
+        <p>B & K Group (PHUSHA S'MOKOLO) operates this online store. Contact: Moreleta Corner, Cnr Garsfontein Rd &amp; Rubenstain Dr, Moreleta Park, Pretoria. Email: <a href="mailto:bandkgroupptyltd@outlook.com">bandkgroupptyltd@outlook.com</a>. Phone/WhatsApp: <a href="tel:+27782376257">+27 78 237 6257</a>.</p>
+
+        <h3>3. Products and pricing</h3>
+        <p>All prices are in South African Rand (ZAR) and include VAT where applicable. We reserve the right to correct pricing errors and to change prices without prior notice. Product images are for illustration; actual goods may vary slightly. We sell genuine leather and quality footwear as described on each product page.</p>
+
+        <h3>4. Orders and quotations</h3>
+        <p>Orders are not binding until we confirm availability and payment details. By requesting a quotation (PDF) and submitting it to us via email or WhatsApp, you are expressing interest to purchase. We will confirm stock, total amount, and payment instructions. Payment terms and delivery arrangements will be agreed at that stage.</p>
+
+        <h3>5. Payment</h3>
+        <p>Payment methods and terms will be communicated when we confirm your order. We do not process payment on this website; payment is completed via the method we agree with you (e.g. EFT, cash on collection) after quotation acceptance.</p>
+
+        <h3>6. Delivery</h3>
+        <p>Delivery options, costs, and timeframes depend on your location and will be confirmed with your order. Risk of loss passes to you upon delivery. We are not liable for delays caused by couriers or events outside our control.</p>
+
+        <h3>7. Returns, refunds and warranty</h3>
+        <p>Due to the nature of footwear, we do not offer refunds or returns unless the product is defective or not as described. Please check sizing and product details before ordering. Any warranty is limited to defects in materials or workmanship and will be handled on a case-by-case basis. Contact us for any issues.</p>
+
+        <h3>8. Privacy</h3>
+        <p>We use your name, email, phone, and address only to process orders and communicate with you. We do not sell your data. Feedback and chat messages may be stored for service improvement. By using the site you consent to this use.</p>
+
+        <h3>9. Intellectual property</h3>
+        <p>All content on this website (text, images, logo, PHUSHA S'MOKOLO branding) is owned by B & K Group and may not be copied or used without our written permission.</p>
+
+        <h3>10. Limitation of liability</h3>
+        <p>We are not liable for indirect, incidental, or consequential damages arising from use of the site or products. Our liability is limited to the purchase price of the product in question, except where law does not allow such limitation.</p>
+
+        <h3>11. Governing law</h3>
+        <p>These terms are governed by the laws of the Republic of South Africa. Any disputes shall be subject to the courts of South Africa.</p>
+
+        <h3>12. Changes</h3>
+        <p>We may update these Terms and Conditions from time to time. The "Last updated" date at the top reflects the latest version. Continued use of the site after changes constitutes acceptance.</p>
+
+        <p class="terms-contact">For questions about these terms, contact us at <a href="mailto:bandkgroupptyltd@outlook.com">bandkgroupptyltd@outlook.com</a> or <a href="tel:+27782376257">+27 78 237 6257</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <button type="button" class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+  <!-- Chatbot: available on every page -->
+  <div class="chat-widget" id="chatWidget" aria-label="Shopping assistant">
+    <div class="chat-panel" id="chatPanel" hidden>
+      <div class="chat-header">
+        <h3 class="chat-title">Shopping assistant</h3>
+        <button type="button" class="chat-close" id="chatClose" aria-label="Close chat">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+      <div class="chat-voice-bar">
+        <label class="chat-voice-label">
+          <input type="checkbox" id="chatVoiceToggle" class="chat-voice-checkbox" aria-label="Speak bot replies aloud" />
+          <span>Speak replies</span>
+        </label>
+      </div>
+      <div class="chat-input-wrap">
+        <input type="text" id="chatInput" class="chat-input" placeholder="Ask about products, navigation, or get help..." maxlength="500" aria-label="Message" />
+        <button type="button" class="chat-send btn btn-primary" id="chatSend" aria-label="Send">Send</button>
+      </div>
+    </div>
+    <button type="button" class="chat-toggle" id="chatToggle" aria-label="Open chat assistant" title="Chat with us">
+      <span class="chat-toggle-icon">💬</span>
+    </button>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-contact">
+      <p class="footer-address">
+        <span class="footer-label">Address</span>
+        Moreleta Corner, Cnr Garsfontein Rd &amp; Rubenstain Dr,<br />
+        Moreleta Park, Pretoria
+      </p>
+      <p class="footer-email">
+        <span class="footer-label">Email</span>
+        <a href="mailto:bandkgroupptyltd@outlook.com">bandkgroupptyltd@outlook.com</a>
+      </p>
+      <p class="footer-phone">
+        <span class="footer-label">Phone</span>
+        <a href="tel:+27782376257">+27 78 237 6257</a>
+      </p>
+    </div>
+    <p class="footer-copy">© B & K Group · PHUSHA S'MOKOLO · <a href="#" data-page="feedback" class="footer-feedback-link">Leave feedback</a> · <a href="#" data-page="terms" class="footer-terms-link">Terms &amp; Conditions</a></p>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
