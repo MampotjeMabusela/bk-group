@@ -21,5 +21,12 @@
   {"id":"20","name":"#20 Ladies boots","description":"Nubuck leather","price":600,"originalPrice":null,"image":"/images/product-20.png","category":"boots","sizes":[3,4,5,6,7,8]},
   {"id":"21","name":"#21 Genuine leather sandals","description":"Genuine leather sandals","price":500,"originalPrice":null,"image":"/images/product-21.png","category":"sandals","sizes":[3,4,5,6,7,8]},
   {"id":"22","name":"#22 Filo leather Sandals","description":"Brown Leather Sandals","price":500,"originalPrice":null,"image":"/images/product-22.png","category":"sandals","sizes":[3,4,5,6,7,8]},
-  {"id":"23","name":"#23 Hydrade Vellies","description":"Leather Vellies","price":750,"originalPrice":null,"image":"/images/product-23.png","category":"vellies","sizes":[3,4,5,6,7,8]}
+  {"id":"23","name":"#23 Hydrade Vellies","description":"Leather Vellies","price":750,"originalPrice":null,"image":"/images/product-23.png","category":"vellies","sizes":[3,4,5,6,7,8]},
+  {"id":"24","name":"#24 Safari Vellies","description":"Blue Vellies","price":659.99,"originalPrice":null,"image":"/images/product-24.png","category":"vellies","sizes":[4,5,6,7,8]},
+  {"id":"25","name":"#25 Safari Vellies","description":"Brown Vellies","price":659.99,"originalPrice":null,"image":"/images/product-25.png","category":"vellies","sizes":[4,5,6,7,8]},
+  {"id":"26","name":"#26 Safari Vellies","description":"Black Vellies","price":659.99,"originalPrice":null,"image":"/images/product-26.png","category":"vellies","sizes":[6,7,8,9,10,11]},
+  {"id":"27","name":"#27 Hydrade Vellies","description":"Leather Vellies","price":750,"originalPrice":null,"image":"/images/product-27.png","category":"vellies","sizes":[3,4,5,6,7,8]},
+  {"id":"28","name":"#28 Hydrade Vellies","description":"Leather Vellies","price":750,"originalPrice":null,"image":"/images/product-28.png","category":"vellies","sizes":[3,4,5,6,7,8]},
+  {"id":"29","name":"#29 Hygrade Suede Vellies","description":"Blue Suede Vellies","price":659.99,"originalPrice":null,"image":"/images/product-29.png","category":"vellies","sizes":[4,5,6,7,8]},
+  {"id":"30","name":"#30 Hygrade Suede Vellies","description":"Oak Suede Vellies","price":659.99,"originalPrice":null,"image":"/images/product-30.png","category":"vellies","sizes":[3,4,5,6,7,8]}
 ]

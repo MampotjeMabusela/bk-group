@@ -798,6 +798,13 @@ body {
   letter-spacing: 0.04em;
 }
 
+.footer-developer {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.7rem;
+  color: rgba(184, 184, 212, 0.75);
+}
+
 .footer-feedback-link {
   color: var(--gold);
   text-decoration: none;

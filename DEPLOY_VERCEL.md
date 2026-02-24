@@ -107,7 +107,8 @@ If you prefer not to use Git or want to deploy from your machine:
 - **`public/`** – Served as static files (HTML, CSS, JS, images).
 - **`api/index.js`** – Serverless function that runs your API (`/api/products`, `/api/quotation`, `/api/feedback`).
 - **`server/`** – API logic and data (`app.js`, `products.json`, `quotation-pdf.js`, etc.).
-- **`vercel.json`** – Tells Vercel to serve `public`, route `/api/*` to the function, and send other paths to `index.html` for the SPA.
+- **`vercel.json`** – Tells Vercel to serve `public`, route `/api/*` to the function, and send other paths to `index.html` for the SPA. **Do not add a `functions` or `runtime` section** to `vercel.json`; Node version is set only in `package.json` via `engines.node`.
+- **`package.json`** – The `engines.node` field (e.g. `"20.x"`) is the only place to set the Node.js version for Vercel. This prevents the "Function Runtimes must have a valid version" error.
 
 ---
 
@@ -115,6 +116,7 @@ If you prefer not to use Git or want to deploy from your machine:
 
 | Issue | What to do |
 |--------|------------|
+| **"Function Runtimes must have a valid version"** | Do **not** add `functions` or `runtime` to `vercel.json`. Set Node only in root `package.json`: `"engines": { "node": "20.x" }`. Then redeploy. |
 | Build fails | Check the build log in Vercel. Ensure `npm install` and `npm run build` work locally in the project root. |
 | 404 on `/api/products` | Confirm `vercel.json` has the rewrite from `/api/(.*)` to `/api` and that `api/index.js` exists. |
 | Blank page or wrong route | The SPA rewrite in `vercel.json` should send non-file paths to `/index.html`. Check that `outputDirectory` is `public`. |
