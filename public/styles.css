@@ -225,6 +225,168 @@ body {
   font-size: 0.6rem;
 }
 
+.new-arrivals {
+  margin: 1.75rem 0 1.5rem;
+}
+
+.new-arrivals-inner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 1.5rem 1.5rem 1.75rem;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(249, 211, 66, 0.16), transparent 55%),
+    radial-gradient(circle at 100% 0%, rgba(0, 217, 255, 0.14), transparent 55%),
+    linear-gradient(135deg, #16213e 0%, #0f3460 40%, #291b4a 70%, #321b3f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(233, 69, 96, 0.3);
+}
+
+.new-arrivals-inner::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(from 210deg, rgba(249,211,66,0.4), transparent, rgba(0,217,255,0.3), transparent, rgba(233,69,96,0.4));
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.new-arrivals-inner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.new-arrivals-header {
+  text-align: left;
+  margin-bottom: 1.25rem;
+}
+
+.new-arrivals-kicker {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(249, 211, 66, 0.9);
+}
+
+.new-arrivals-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ffffff, var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.new-arrivals-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(232, 232, 255, 0.85);
+  max-width: 520px;
+}
+
+.new-arrivals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.new-arrivals-card {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: radial-gradient(circle at 0% 0%, rgba(0,0,0,0.45), rgba(0,0,0,0.7));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+}
+
+.new-arrivals-media {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #1e223d, #111320);
+}
+
+.new-arrivals-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.03);
+}
+
+.new-arrivals-pill {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.55rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.65);
+  color: rgba(249, 211, 66, 0.95);
+  border: 1px solid rgba(249, 211, 66, 0.65);
+}
+
+.new-arrivals-tag {
+  position: absolute;
+  bottom: 0.45rem;
+  left: 0.55rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: #fff;
+  box-shadow: 0 0 20px rgba(233, 69, 96, 0.7);
+}
+
+.new-arrivals-info {
+  min-width: 0;
+}
+
+.new-arrivals-name {
+  margin: 0 0 0.2rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.new-arrivals-desc {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  color: rgba(232, 232, 255, 0.9);
+}
+
+.new-arrivals-price {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--gold), var(--accent-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.new-arrivals-actions {
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.new-arrivals-cta {
+  padding-inline: 1.75rem;
+  font-size: 0.9rem;
+}
 .main {
   flex: 1;
   max-width: 1100px;
@@ -1343,6 +1505,26 @@ body:has(.back-to-top.visible) .chat-widget {
     font-size: 16px;
   }
 
+  .new-arrivals {
+    margin: 1.25rem 0 1.25rem;
+  }
+
+  .new-arrivals-inner {
+    padding: 1.1rem 1rem 1.25rem;
+  }
+
+  .new-arrivals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .new-arrivals-card {
+    grid-template-columns: 1.2fr 1.8fr;
+  }
+
+  .new-arrivals-title {
+    font-size: 1.4rem;
+  }
+
   .products-header {
     flex-direction: column;
     align-items: stretch;
@@ -1479,6 +1661,14 @@ body:has(.back-to-top.visible) .chat-widget {
 
   .main {
     padding: 0.75rem max(0.75rem, env(safe-area-inset-left)) 1.5rem max(0.75rem, env(safe-area-inset-right));
+  }
+
+  .new-arrivals-inner {
+    padding: 0.9rem 0.75rem 1.1rem;
+  }
+
+  .new-arrivals-card {
+    grid-template-columns: 1fr;
   }
 
   .product-grid {
