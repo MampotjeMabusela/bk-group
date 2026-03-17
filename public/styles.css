@@ -1,23 +1,23 @@
 :root {
-  --bg: #1a1a2e;
-  --bg-card: #252542;
-  --bg-input: #2d2d4a;
-  --text: #f0f0ff;
+  --bg: #151521;
+  --bg-card: #242235;
+  --bg-input: #2b2940;
+  --text: #f6f6ff;
   --text-muted: #b8b8d4;
   --accent: #e94560;
   --accent-light: #ff6b6b;
   --accent-glow: rgba(233, 69, 96, 0.4);
-  --header-bg: linear-gradient(135deg, #16213e 0%, #0f3460 40%, #e94560 100%);
-  --header-border: rgba(255, 255, 255, 0.2);
-  --gold: #f9d342;
-  --gold-soft: rgba(249, 211, 66, 0.2);
+  --header-bg: linear-gradient(135deg, #1b2436 0%, #0f3460 40%, #a35729 70%, #e0a14a 100%);
+  --header-border: rgba(255, 255, 255, 0.16);
+  --gold: #f5cf70;
+  --gold-soft: rgba(245, 207, 112, 0.18);
   --cyan: #00d9ff;
   --purple: #a855f7;
   --border: rgba(255,255,255,0.1);
   --sale: #ff4757;
   --radius: 16px;
-  --shadow: 0 8px 32px rgba(0,0,0,0.4);
-  --shadow-glow: 0 0 40px rgba(233, 69, 96, 0.2), 0 0 80px rgba(0, 217, 255, 0.1);
+  --shadow: 0 8px 32px rgba(0,0,0,0.45);
+  --shadow-glow: 0 0 40px rgba(233, 69, 96, 0.22), 0 0 80px rgba(0, 217, 255, 0.12);
 }
 
 @keyframes fadeInUp {
@@ -46,6 +46,12 @@
   100% { background-position: 0% 50%; }
 }
 
+@keyframes shimmer-kicker {
+  0% { opacity: 0.75; letter-spacing: 0.16em; }
+  50% { opacity: 1; letter-spacing: 0.22em; }
+  100% { opacity: 0.75; letter-spacing: 0.16em; }
+}
+
 *,
 *::before,
 *::after {
@@ -53,6 +59,8 @@
 }
 
 html {
+  /* Keep fonts consistent across browsers and devices */
+  text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
@@ -98,9 +106,10 @@ body {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(22, 33, 62, 0.85) 0%,
-    rgba(15, 52, 96, 0.9) 40%,
-    rgba(233, 69, 96, 0.25) 100%
+    rgba(21, 24, 45, 0.96) 0%,
+    rgba(20, 39, 76, 0.96) 38%,
+    rgba(120, 70, 32, 0.82) 72%,
+    rgba(28, 20, 15, 0.96) 100%
   );
   z-index: 1;
 }
@@ -207,9 +216,11 @@ body {
   justify-content: center;
   align-items: center;
   gap: 1rem 2rem;
-  padding: 0.875rem 1rem;
-  background: linear-gradient(90deg, rgba(22, 33, 62, 0.6), rgba(15, 52, 96, 0.5), rgba(233, 69, 96, 0.15));
-  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  background:
+    linear-gradient(120deg, rgba(63, 46, 32, 0.7), rgba(26, 28, 48, 0.92)),
+    radial-gradient(circle at 0% 0%, rgba(245, 207, 112, 0.18), transparent 55%);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   font-size: 0.85rem;
   color: var(--text-muted);
 }
@@ -235,11 +246,11 @@ body {
   border-radius: 20px;
   padding: 1.5rem 1.5rem 1.75rem;
   background:
-    radial-gradient(circle at 0% 0%, rgba(249, 211, 66, 0.16), transparent 55%),
+    radial-gradient(circle at 0% 0%, rgba(245, 207, 112, 0.18), transparent 55%),
     radial-gradient(circle at 100% 0%, rgba(0, 217, 255, 0.14), transparent 55%),
-    linear-gradient(135deg, #16213e 0%, #0f3460 40%, #291b4a 70%, #321b3f 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(233, 69, 96, 0.3);
+    linear-gradient(135deg, #232432 0%, #2d3748 35%, #5a3720 70%, #201612 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(233, 69, 96, 0.35);
 }
 
 .new-arrivals-inner::before {
@@ -267,7 +278,8 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(249, 211, 66, 0.9);
+  color: rgba(245, 207, 112, 0.95);
+  animation: shimmer-kicker 4s linear infinite;
 }
 
 .new-arrivals-title {
@@ -421,7 +433,6 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-fill-color: transparent;
 }
 
 .filter-wrap {
