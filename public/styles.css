@@ -966,6 +966,36 @@ body {
   line-height: 1.5;
 }
 
+.footer-phone-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.footer-whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  color: #25d366 !important;
+  background: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.45);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.footer-whatsapp-link svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.footer-whatsapp-link:hover {
+  transform: translateY(-1px);
+  background: rgba(37, 211, 102, 0.22);
+  box-shadow: 0 0 14px rgba(37, 211, 102, 0.4);
+}
+
 .footer-contact a {
   color: var(--text);
   text-decoration: none;

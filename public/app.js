@@ -1,4 +1,5 @@
 const API = '/api';
+const BUSINESS_WHATSAPP_NUMBER = '27782376257';
 
 let products = [];
 let cart = [];
@@ -328,10 +329,25 @@ function init() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || 'Could not send feedback');
       }
+
+      const subjectLabel =
+        (form.subject?.selectedOptions && form.subject.selectedOptions[0]?.textContent) ||
+        subject ||
+        'General feedback';
+      const whatsappText =
+        `Hello B & K Group, I would like to send feedback.%0A%0A` +
+        `Name: ${encodeURIComponent(name)}%0A` +
+        `Email: ${encodeURIComponent(email)}%0A` +
+        `Rating: ${encodeURIComponent(String(rating))}/5%0A` +
+        `Subject: ${encodeURIComponent(subjectLabel)}%0A` +
+        `Message: ${encodeURIComponent(message)}`;
+      const whatsappUrl = `https://wa.me/${BUSINESS_WHATSAPP_NUMBER}?text=${whatsappText}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
       if (msgEl) {
         msgEl.hidden = false;
         msgEl.className = 'feedback-message success';
-        msgEl.textContent = 'Thank you! Your feedback has been sent. We appreciate it.';
+        msgEl.textContent = 'Thank you! Feedback saved and WhatsApp opened. Please tap send in WhatsApp as well.';
       }
       form.reset();
       $('#feedbackRating').value = '5';
