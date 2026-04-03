@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/easter.css" />
 </head>
 <body>
   <header class="site-header">
@@ -99,6 +100,7 @@
       <ul class="cart-list" id="cartList"></ul>
       <div class="cart-footer" id="cartFooter" hidden>
         <p class="cart-total">Total: <strong id="cartTotal">ZAR 0.00</strong></p>
+        <p id="cartEasterNote" class="easter-cart-note" hidden>Easter tier savings are included in line totals (20% / 15% / 10% by price band).</p>
         <button type="button" class="btn btn-primary" id="checkoutBtn">Get quotation</button>
       </div>
     </section>
@@ -282,6 +284,18 @@
     </section>
   </main>
 
+  <div id="imageLightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="Product photos">
+    <div class="image-lightbox-backdrop" data-lightbox-close tabindex="-1"></div>
+    <div class="image-lightbox-inner">
+      <button type="button" class="image-lightbox-close" id="imageLightboxClose" aria-label="Close enlarged photo">×</button>
+      <button type="button" class="image-lightbox-nav image-lightbox-prev" id="imageLightboxPrev" aria-label="Previous photo">‹</button>
+      <div class="image-lightbox-frame">
+        <img id="imageLightboxImg" src="" alt="" />
+      </div>
+      <button type="button" class="image-lightbox-nav image-lightbox-next" id="imageLightboxNext" aria-label="Next photo">›</button>
+    </div>
+  </div>
+
   <button type="button" class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
 
   <!-- Chatbot: available on every page -->
@@ -341,6 +355,7 @@
     <p class="footer-copy">© B & K Group · PHUSHA S'MOKOLO · <a href="#" data-page="feedback" class="footer-feedback-link">Leave feedback</a> · <a href="#" data-page="terms" class="footer-terms-link">Terms &amp; Conditions</a><br /><span class="footer-developer">Developed by Mampotje Mabusela</span></p>
   </footer>
 
+  <script src="/easter.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>

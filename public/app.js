@@ -7,8 +7,155 @@ let cart = [];
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => el.querySelectorAll(sel);
 
+function escapeAttr(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;');
+}
+
+function getProductImages(p) {
+  if (Array.isArray(p.images) && p.images.length > 0) return p.images;
+  return p.image ? [p.image] : [];
+}
+
+let lightboxImages = [];
+let lightboxIndex = 0;
+let lightboxProductName = '';
+
+function updateLightboxImage() {
+  const img = $('#imageLightboxImg');
+  const prev = $('#imageLightboxPrev');
+  const next = $('#imageLightboxNext');
+  if (!img) return;
+  const src = lightboxImages[lightboxIndex];
+  if (src) {
+    img.src = src;
+    const n = lightboxImages.length;
+    img.alt = lightboxProductName
+      ? `${lightboxProductName} — photo ${lightboxIndex + 1} of ${n}`
+      : '';
+  }
+  const multi = lightboxImages.length > 1;
+  if (prev) prev.hidden = !multi;
+  if (next) next.hidden = !multi;
+}
+
+function openImageLightbox(images, index, productName) {
+  lightboxImages = images.slice();
+  lightboxIndex = Math.max(0, Math.min(index, Math.max(0, lightboxImages.length - 1)));
+  lightboxProductName = productName || '';
+  const el = $('#imageLightbox');
+  if (!el || lightboxImages.length === 0) return;
+  el.hidden = false;
+  document.body.classList.add('lightbox-open');
+  updateLightboxImage();
+  $('#imageLightboxClose')?.focus();
+}
+
+function closeImageLightbox() {
+  const el = $('#imageLightbox');
+  if (el) el.hidden = true;
+  document.body.classList.remove('lightbox-open');
+  lightboxImages = [];
+}
+
+function stepLightbox(delta) {
+  if (lightboxImages.length <= 1) return;
+  lightboxIndex = (lightboxIndex + delta + lightboxImages.length * 10) % lightboxImages.length;
+  updateLightboxImage();
+}
+
+function stepProductGallery(productId, delta) {
+  const wrap = document.querySelector(`[data-product-gallery="${String(productId)}"]`);
+  if (!wrap) return;
+  let images;
+  try {
+    images = JSON.parse(wrap.getAttribute('data-images') || '[]');
+  } catch {
+    return;
+  }
+  if (!images.length) return;
+  let idx = parseInt(wrap.getAttribute('data-index') || '0', 10) || 0;
+  idx = (idx + delta + images.length * 10) % images.length;
+  wrap.setAttribute('data-index', String(idx));
+  const img = wrap.querySelector('.product-gallery-img');
+  if (img) img.src = images[idx];
+}
+
+function handleProductGalleryInteraction(e) {
+  const nav = e.target.closest('[data-gallery-nav]');
+  if (nav) {
+    e.preventDefault();
+    e.stopPropagation();
+    stepProductGallery(nav.getAttribute('data-gallery-nav'), parseInt(nav.dataset.dir, 10) || 0);
+    return true;
+  }
+  const zoom = e.target.closest('[data-gallery-open]');
+  if (zoom) {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = zoom.getAttribute('data-gallery-open');
+    const wrap = document.querySelector(`[data-product-gallery="${String(id)}"]`);
+    if (!wrap) return true;
+    let images;
+    try {
+      images = JSON.parse(wrap.getAttribute('data-images') || '[]');
+    } catch {
+      return true;
+    }
+    const idx = parseInt(wrap.getAttribute('data-index') || '0', 10) || 0;
+    const name = wrap.getAttribute('data-product-name') || '';
+    openImageLightbox(images, idx, name);
+    return true;
+  }
+  return false;
+}
+
 function formatPrice(amount) {
   return 'ZAR ' + Number(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+/** Easter tiered promo: cheapest third 20%, middle third 15%, top third 10% (by catalog price). */
+const easterDiscountByProductId = new Map();
+
+function buildEasterDiscounts() {
+  easterDiscountByProductId.clear();
+  if (!products.length) return;
+  const sorted = [...products].sort((a, b) => {
+    const pa = Number(a.price) || 0;
+    const pb = Number(b.price) || 0;
+    if (pa !== pb) return pa - pb;
+    return String(a.id).localeCompare(String(b.id), undefined, { numeric: true });
+  });
+  const n = sorted.length;
+  const aEnd = Math.ceil(n / 3);
+  const bEnd = Math.ceil((2 * n) / 3);
+  sorted.forEach((p, i) => {
+    const f = i < aEnd ? 0.2 : i < bEnd ? 0.15 : 0.1;
+    easterDiscountByProductId.set(String(p.id), f);
+  });
+}
+
+function getEasterDiscountFraction(product) {
+  return easterDiscountByProductId.get(String(product.id)) ?? 0;
+}
+
+function getEasterSalePrice(product) {
+  const base = Number(product.price) || 0;
+  const d = getEasterDiscountFraction(product);
+  return Math.round(base * (1 - d) * 100) / 100;
+}
+
+function syncCartEasterPrices() {
+  if (!products.length) return;
+  cart = cart.map((item) => {
+    const p = products.find((x) => String(x.id) === String(item.id));
+    if (!p) return item;
+    return { ...item, price: getEasterSalePrice(p) };
+  });
+  localStorage.setItem('bk-cart', JSON.stringify(cart));
+  updateCartCount();
 }
 
 function getCart() {
@@ -53,6 +200,8 @@ function renderProducts() {
     ? products.filter(p => (p.category || '').toLowerCase() === category.toLowerCase())
     : products;
   grid.innerHTML = filtered.map((p, i) => {
+    const easterFrac = getEasterDiscountFraction(p);
+    const easterSale = getEasterSalePrice(p);
     const orig = p.originalPrice ? `<span class="product-original">${formatPrice(p.originalPrice)}</span>` : '';
     const sizes = p.sizes && p.sizes.length ? p.sizes : [];
     const sizeOptions = sizes.map(s => `<option value="${s}">${s}</option>`).join('');
@@ -61,17 +210,29 @@ function renderProducts() {
         <label for="size-${p.id}">Size</label>
         <select id="size-${p.id}" class="product-size" data-id="${p.id}" aria-label="Size">${sizeOptions}</select>
       </div>` : '';
+    const imgs = getProductImages(p);
+    const imagesAttr = escapeAttr(JSON.stringify(imgs));
+    const navHtml = imgs.length > 1 ? `
+      <button type="button" class="gallery-nav gallery-prev" data-gallery-nav="${escapeAttr(p.id)}" data-dir="-1" aria-label="Previous image">‹</button>
+      <button type="button" class="gallery-nav gallery-next" data-gallery-nav="${escapeAttr(p.id)}" data-dir="1" aria-label="Next image">›</button>` : '';
+    const fitContain = String(p.id) === '1' || String(p.id) === '2' || String(p.id) === '3' || String(p.id) === '4' || String(p.id) === '5' || String(p.id) === '6' || String(p.id) === '7' || String(p.id) === '8' || String(p.id) === '9' || String(p.id) === '10' || String(p.id) === '11' || String(p.id) === '13' || String(p.id) === '14' || String(p.id) === '15' || String(p.id) === '16' || String(p.id) === '17' || String(p.id) === '18' || String(p.id) === '19' || String(p.id) === '20' || String(p.id) === '21' || String(p.id) === '22';
+    const imageBlock = `
+        <div class="product-image-wrap${imgs.length > 1 ? ' product-image-wrap--gallery' : ''}${fitContain ? ' product-image-wrap--contain' : ''}" data-product-gallery="${escapeAttr(p.id)}" data-images="${imagesAttr}" data-index="0" data-product-name="${escapeAttr(p.name)}">
+          ${navHtml}
+          <button type="button" class="gallery-zoom" data-gallery-open="${escapeAttr(p.id)}" aria-label="View larger: ${escapeAttr(p.name)}">
+            <img src="${escapeAttr(imgs[0] || '')}" alt="${escapeAttr(p.name)}" class="product-gallery-img" loading="lazy" />
+          </button>
+        </div>`;
     return `
       <li class="product-card" data-id="${p.id}" style="animation-delay: ${i * 0.06}s">
-        <div class="product-image-wrap">
-          <img src="${p.image}" alt="${p.name}" loading="lazy" />
-        </div>
+        ${imageBlock}
         <div class="product-info">
           <h3 class="product-name">${p.name}</h3>
           <p class="product-desc">${p.description}</p>
           <div class="product-price-wrap">
-            <span class="product-price">${formatPrice(p.price)}</span>
-            ${orig}
+            ${easterFrac > 0
+    ? `<span class="product-price easter-sale">${formatPrice(easterSale)}</span><span class="product-easter-was">${formatPrice(p.price)}</span>${orig}<span class="easter-pill" aria-label="Easter discount">${Math.round(easterFrac * 100)}% Easter</span>`
+    : `<span class="product-price">${formatPrice(p.price)}</span>${orig}`}
           </div>
           ${sizeSelect}
           <div class="product-actions">
@@ -93,6 +254,7 @@ function getSelectedSize(productId) {
 }
 
 function handleProductGridClick(e) {
+  if (handleProductGalleryInteraction(e)) return;
   const grid = $('#productGrid');
   const btn = e.target.closest('[data-action][data-id]');
   if (!btn || !grid) return;
@@ -128,11 +290,11 @@ function addToCart(product, delta = 1, size = null) {
     if (qty === 0) {
       next = cart.filter(i => !(i.id === product.id && String(i.size || '') === sizeStr));
     } else {
-      next = cart.map(i => i.id === product.id && String(i.size || '') === sizeStr ? { ...i, quantity: qty } : i);
+      next = cart.map(i => i.id === product.id && String(i.size || '') === sizeStr ? { ...i, quantity: qty, price: getEasterSalePrice(product) } : i);
     }
   } else {
     if (delta <= 0) return;
-    next = [...cart, { ...product, quantity: 1, size: sizeStr || undefined }];
+    next = [...cart, { ...product, price: getEasterSalePrice(product), quantity: 1, size: sizeStr || undefined }];
   }
   setCart(next);
 }
@@ -168,6 +330,14 @@ function renderCart() {
 
   const total = cart.reduce((n, i) => n + (i.price || 0) * (i.quantity || 1), 0);
   $('#cartTotal').textContent = formatPrice(total);
+  const cartNote = $('#cartEasterNote');
+  if (cartNote) {
+    const hasEaster = cart.some((item) => {
+      const p = products.find((x) => String(x.id) === String(item.id));
+      return p && getEasterDiscountFraction(p) > 0;
+    });
+    cartNote.hidden = !hasEaster;
+  }
 
   list.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-cart][data-id]');
@@ -198,11 +368,16 @@ function renderCheckout() {
     return;
   }
   const total = cart.reduce((n, i) => n + (i.price || 0) * (i.quantity || 1), 0);
+  const easterCheckoutNote = cart.some((item) => {
+    const p = products.find((x) => String(x.id) === String(item.id));
+    return p && getEasterDiscountFraction(p) > 0;
+  });
   summary.innerHTML = `
     <ul>
       ${cart.map(i => `<li>${i.name}${i.size ? ` (Size ${i.size})` : ''} × ${i.quantity || 1} – ${formatPrice((i.price || 0) * (i.quantity || 1))}</li>`).join('')}
     </ul>
-    <div class="total">Total: ${formatPrice(total)}</div>`;
+    <div class="total">Total: ${formatPrice(total)}</div>
+    ${easterCheckoutNote ? '<p class="easter-cart-note">Totals include Easter tier savings (20% / 15% / 10% by price band).</p>' : ''}`;
 }
 
 async function loadProducts() {
@@ -229,6 +404,19 @@ function init() {
 
   $('#categoryFilter')?.addEventListener('change', () => renderProducts());
   $('#productGrid')?.addEventListener('click', handleProductGridClick);
+
+  $('#imageLightboxClose')?.addEventListener('click', () => closeImageLightbox());
+  $$('[data-lightbox-close]').forEach((el) => {
+    el.addEventListener('click', () => closeImageLightbox());
+  });
+  $('#imageLightboxPrev')?.addEventListener('click', () => stepLightbox(-1));
+  $('#imageLightboxNext')?.addEventListener('click', () => stepLightbox(1));
+  document.addEventListener('keydown', (e) => {
+    if ($('#imageLightbox')?.hidden) return;
+    if (e.key === 'Escape') closeImageLightbox();
+    else if (e.key === 'ArrowLeft') stepLightbox(-1);
+    else if (e.key === 'ArrowRight') stepLightbox(1);
+  });
 
   $('#checkoutBtn')?.addEventListener('click', () => showPage('checkout'));
   $('#backToCart')?.addEventListener('click', () => showPage('cart'));
@@ -278,6 +466,8 @@ function init() {
   });
 
   loadProducts().then(() => {
+    buildEasterDiscounts();
+    syncCartEasterPrices();
     renderProducts();
   });
 
