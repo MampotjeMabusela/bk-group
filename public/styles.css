@@ -886,7 +886,7 @@ body.lightbox-open {
   .btn,
   .nav-link,
   .cart-item-remove,
-  .star-btn,
+  .rating-item label,
   .chat-toggle,
   .back-to-top,
   .gallery-nav,
@@ -1409,29 +1409,97 @@ body.lightbox-open {
   border-color: var(--accent);
 }
 
-.rating-stars {
+/* Feedback: 0–10 rating (native radios — one choice, accessible) */
+.form-group--rating {
+  margin-top: 0.25rem;
+}
+
+.rating-fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-width: 0;
+}
+
+.rating-legend {
+  float: none;
+  width: 100%;
+  padding: 0;
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.rating-legend-hint {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.rating-options {
   display: flex;
-  gap: 0.25rem;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
   margin-top: 0.35rem;
 }
 
-.star-btn {
-  background: none;
-  border: none;
-  padding: 0.25rem;
-  cursor: pointer;
-  font-size: 1.75rem;
+.rating-item {
+  position: relative;
+  margin: 0;
+}
+
+.rating-item input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.rating-item label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.35rem;
+  min-height: 2.35rem;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: var(--text-muted);
-  transition: color 0.2s ease, transform 0.15s ease;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.12s ease;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.star-btn:hover {
-  color: var(--gold);
-  transform: scale(1.1);
+.rating-item label:hover {
+  border-color: rgba(245, 207, 112, 0.45);
+  color: var(--text);
 }
 
-.star-btn.filled {
-  color: var(--gold);
+.rating-item input:focus-visible + label {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.rating-item input:checked + label {
+  background: linear-gradient(135deg, var(--accent) 0%, #ff6b6b 100%);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 12px var(--accent-glow);
+}
+
+.rating-item input:checked + label:hover {
+  color: #fff;
 }
 
 .feedback-actions {

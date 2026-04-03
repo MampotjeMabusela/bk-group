@@ -205,16 +205,25 @@
             <input type="email" id="feedbackEmail" name="email" required placeholder="you@example.com" />
           </div>
         </div>
-        <div class="form-group">
-          <label>Rating</label>
-          <div class="rating-stars" role="group" aria-label="Rate your experience">
-            <button type="button" class="star-btn" data-rating="1" aria-label="1 star">★</button>
-            <button type="button" class="star-btn" data-rating="2" aria-label="2 stars">★</button>
-            <button type="button" class="star-btn" data-rating="3" aria-label="3 stars">★</button>
-            <button type="button" class="star-btn" data-rating="4" aria-label="4 stars">★</button>
-            <button type="button" class="star-btn" data-rating="5" aria-label="5 stars">★</button>
-          </div>
-          <input type="hidden" id="feedbackRating" name="rating" value="5" />
+        <div class="form-group form-group--rating">
+          <fieldset class="rating-fieldset">
+            <legend class="rating-legend">
+              Rating <span class="rating-legend-hint">(0 = lowest · 10 = highest)</span>
+            </legend>
+            <div class="rating-options">
+              <div class="rating-item"><input type="radio" name="rating" value="0" id="rating-0" /><label for="rating-0">0</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="1" id="rating-1" /><label for="rating-1">1</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="2" id="rating-2" /><label for="rating-2">2</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="3" id="rating-3" /><label for="rating-3">3</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="4" id="rating-4" /><label for="rating-4">4</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="5" id="rating-5" checked /><label for="rating-5">5</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="6" id="rating-6" /><label for="rating-6">6</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="7" id="rating-7" /><label for="rating-7">7</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="8" id="rating-8" /><label for="rating-8">8</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="9" id="rating-9" /><label for="rating-9">9</label></div>
+              <div class="rating-item"><input type="radio" name="rating" value="10" id="rating-10" /><label for="rating-10">10</label></div>
+            </div>
+          </fieldset>
         </div>
         <div class="form-group">
           <label for="feedbackSubject">Subject</label>

@@ -189,7 +189,6 @@ function showPage(pageId) {
   if (pageId === 'shop') renderProducts();
   if (pageId === 'cart') renderCart();
   if (pageId === 'checkout') renderCheckout();
-  if (pageId === 'feedback') initFeedbackStars();
 }
 
 function renderProducts() {
@@ -471,22 +470,11 @@ function init() {
     renderProducts();
   });
 
-  // Feedback: star rating
-  function initFeedbackStars() {
-    const container = $('.rating-stars');
-    const input = $('#feedbackRating');
-    if (!container || !input) return;
-    const updateStars = (rating) => {
-      const r = Math.min(5, Math.max(1, Number(rating) || 5));
-      input.value = r;
-      $$('.star-btn', container).forEach((btn, i) => {
-        btn.classList.toggle('filled', i < r);
-      });
-    };
-    container.querySelectorAll('.star-btn').forEach(btn => {
-      btn.addEventListener('click', () => updateStars(btn.dataset.rating));
-    });
-    updateStars(input.value);
+  function parseFeedbackRating(form) {
+    const el = form.querySelector('input[name="rating"]:checked');
+    const v = el ? parseInt(el.value, 10) : NaN;
+    if (Number.isFinite(v)) return Math.min(10, Math.max(0, v));
+    return 5;
   }
 
   $('#feedbackForm')?.addEventListener('submit', async (e) => {
@@ -504,7 +492,7 @@ function init() {
       }
       return;
     }
-    const rating = parseInt(form.rating?.value, 10) || 5;
+    const rating = parseFeedbackRating(form);
     const subject = form.subject?.value || 'general';
     const submitBtn = $('#feedbackSubmit');
     if (submitBtn) submitBtn.disabled = true;
@@ -528,7 +516,7 @@ function init() {
         `Hello B & K Group, I would like to send feedback.%0A%0A` +
         `Name: ${encodeURIComponent(name)}%0A` +
         `Email: ${encodeURIComponent(email)}%0A` +
-        `Rating: ${encodeURIComponent(String(rating))}/5%0A` +
+        `Rating: ${encodeURIComponent(String(rating))}/10%0A` +
         `Subject: ${encodeURIComponent(subjectLabel)}%0A` +
         `Message: ${encodeURIComponent(message)}`;
       const whatsappUrl = `https://wa.me/${BUSINESS_WHATSAPP_NUMBER}?text=${whatsappText}`;
@@ -540,8 +528,6 @@ function init() {
         msgEl.textContent = 'Thank you! Feedback saved and WhatsApp opened. Please tap send in WhatsApp as well.';
       }
       form.reset();
-      $('#feedbackRating').value = '5';
-      initFeedbackStars();
     } catch (err) {
       if (msgEl) {
         msgEl.hidden = false;

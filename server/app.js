@@ -73,7 +73,10 @@ app.post('/api/feedback', (req, res) => {
     name: name.trim(),
     email: email.trim(),
     message: message.trim(),
-    rating: Math.min(5, Math.max(1, parseInt(rating, 10) || 5)),
+    rating: (() => {
+      const n = parseInt(rating, 10);
+      return Number.isFinite(n) ? Math.min(10, Math.max(0, n)) : 5;
+    })(),
     subject: subject || 'general',
     createdAt: new Date().toISOString(),
   };
