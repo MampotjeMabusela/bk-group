@@ -1201,6 +1201,46 @@ body.lightbox-open {
   line-height: 1.5;
 }
 
+.footer-email {
+  max-width: min(100%, 26rem);
+}
+
+.footer-email-main {
+  word-break: break-word;
+}
+
+.footer-email-hint,
+.footer-email-web-label {
+  display: block;
+  font-size: 0.78rem;
+  color: rgba(184, 184, 212, 0.88);
+  margin-top: 0.4rem;
+  line-height: 1.45;
+}
+
+.footer-email-web-label {
+  margin-top: 0.65rem;
+}
+
+.footer-email-web {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.footer-email-web a {
+  font-size: 0.86rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-email-web-sep {
+  color: rgba(184, 184, 212, 0.45);
+  user-select: none;
+}
+
 .footer-phone-row {
   display: inline-flex;
   align-items: center;
