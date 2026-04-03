@@ -621,6 +621,41 @@ body {
   padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
 }
 
+.image-lightbox:not([hidden]) .image-lightbox-backdrop {
+  animation: image-lightbox-backdrop-in 0.28s ease-out forwards;
+}
+
+@keyframes image-lightbox-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.image-lightbox:not([hidden]) .image-lightbox-inner {
+  animation: image-lightbox-pop-in 0.38s cubic-bezier(0.22, 1.15, 0.36, 1) forwards;
+}
+
+@keyframes image-lightbox-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-lightbox:not([hidden]) .image-lightbox-backdrop,
+  .image-lightbox:not([hidden]) .image-lightbox-inner {
+    animation: none;
+  }
+}
+
 body.lightbox-open {
   overflow: hidden;
 }
@@ -706,16 +741,24 @@ body.lightbox-open {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0.55rem;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14) 0%, rgba(253, 224, 71, 0.1) 45%, rgba(233, 69, 96, 0.08) 100%);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 3px rgba(253, 224, 71, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.25) inset,
+    0 28px 80px rgba(0, 0, 0, 0.65);
 }
 
 .image-lightbox-frame img {
   max-width: 100%;
-  max-height: 85vh;
+  max-height: calc(85vh - 1.2rem);
   width: auto;
   height: auto;
   object-fit: contain;
   border-radius: 12px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  border: 2px solid rgba(255, 255, 255, 0.35);
 }
 
 .product-info {

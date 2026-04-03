@@ -215,11 +215,11 @@ function renderProducts() {
     const navHtml = imgs.length > 1 ? `
       <button type="button" class="gallery-nav gallery-prev" data-gallery-nav="${escapeAttr(p.id)}" data-dir="-1" aria-label="Previous image">‹</button>
       <button type="button" class="gallery-nav gallery-next" data-gallery-nav="${escapeAttr(p.id)}" data-dir="1" aria-label="Next image">›</button>` : '';
-    const fitContain = String(p.id) === '1' || String(p.id) === '2' || String(p.id) === '3' || String(p.id) === '4' || String(p.id) === '5' || String(p.id) === '6' || String(p.id) === '7' || String(p.id) === '8' || String(p.id) === '9' || String(p.id) === '10' || String(p.id) === '11' || String(p.id) === '13' || String(p.id) === '14' || String(p.id) === '15' || String(p.id) === '16' || String(p.id) === '17' || String(p.id) === '18' || String(p.id) === '19' || String(p.id) === '20' || String(p.id) === '21' || String(p.id) === '22';
+    const fitContain = String(p.id) === '1' || String(p.id) === '2' || String(p.id) === '3' || String(p.id) === '4' || String(p.id) === '5' || String(p.id) === '6' || String(p.id) === '7' || String(p.id) === '8' || String(p.id) === '9' || String(p.id) === '10' || String(p.id) === '11' || String(p.id) === '12' || String(p.id) === '13' || String(p.id) === '14' || String(p.id) === '15' || String(p.id) === '16' || String(p.id) === '17' || String(p.id) === '18' || String(p.id) === '19' || String(p.id) === '20' || String(p.id) === '21' || String(p.id) === '22';
     const imageBlock = `
         <div class="product-image-wrap${imgs.length > 1 ? ' product-image-wrap--gallery' : ''}${fitContain ? ' product-image-wrap--contain' : ''}" data-product-gallery="${escapeAttr(p.id)}" data-images="${imagesAttr}" data-index="0" data-product-name="${escapeAttr(p.name)}">
           ${navHtml}
-          <button type="button" class="gallery-zoom" data-gallery-open="${escapeAttr(p.id)}" aria-label="View larger: ${escapeAttr(p.name)}">
+          <button type="button" class="gallery-zoom" data-gallery-open="${escapeAttr(p.id)}" aria-label="View larger: ${escapeAttr(p.name)}" title="Click to see full size">
             <img src="${escapeAttr(imgs[0] || '')}" alt="${escapeAttr(p.name)}" class="product-gallery-img" loading="lazy" />
           </button>
         </div>`;
