@@ -1295,23 +1295,16 @@ body.lightbox-open {
   color: rgba(184, 184, 212, 0.75);
 }
 
-.footer-feedback-link {
-  color: var(--gold);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.footer-feedback-link:hover {
-  color: var(--accent-light);
-  text-decoration: underline;
-}
-
+.footer-feedback-link,
+.footer-privacy-link,
 .footer-terms-link {
   color: var(--gold);
   text-decoration: none;
   transition: color 0.2s;
 }
 
+.footer-feedback-link:hover,
+.footer-privacy-link:hover,
 .footer-terms-link:hover {
   color: var(--accent-light);
   text-decoration: underline;

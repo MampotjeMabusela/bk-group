@@ -616,9 +616,10 @@ function init() {
     }
 
     // Navigation
-    if (has('testimonial', 'reviews', 'feedback', 'leave feedback', 'terms', 'conditions')) {
+    if (has('testimonial', 'reviews', 'feedback', 'leave feedback', 'terms', 'conditions', 'privacy', 'personal data', 'popia')) {
       if (has('testimonial', 'reviews')) return "You can read customer testimonials by clicking “Testimonials” in the top menu.";
       if (has('feedback', 'leave feedback')) return "Click “Feedback” in the menu to send us your feedback or suggestions.";
+      if (has('privacy', 'personal data', 'popia', 'gdpr', 'cookie')) return "Click “Privacy” at the bottom of the page to read our Privacy Policy.";
       if (has('terms', 'conditions')) return "Click “Terms & Conditions” at the bottom of the page to read our terms.";
     }
     if (has('shop', 'products', 'browse', 'where to buy', 'navigate', 'menu')) {
