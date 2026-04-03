@@ -32,13 +32,89 @@
 
   const footerContact = document.querySelector('.footer-contact');
   if (footerContact) {
+    const comp = document.createElement('p');
+    comp.className = 'easter-footer-competition';
+    comp.textContent =
+      'This is a competition — play along, explore the site, and enjoy the Easter hunt.';
     const mini = document.createElement('p');
     mini.className = 'easter-footer-banner';
     mini.textContent = 'Easter wishes from PHUSHA S\'MOKOLO — hunt the golden eggs for a confetti surprise';
+    footerContact.parentNode.insertBefore(comp, footerContact);
     footerContact.parentNode.insertBefore(mini, footerContact);
   }
 
   const colors = ['#f472b6', '#fde047', '#34d399', '#60a5fa', '#c084fc', '#fb923c', '#f9a8d4', '#fef08a'];
+
+  const JP_STORAGE_KEY = 'easterJp';
+
+  function readOrInitJackpotState() {
+    try {
+      const raw = sessionStorage.getItem(JP_STORAGE_KEY);
+      if (raw) {
+        const o = JSON.parse(raw);
+        if (
+          o &&
+          typeof o.target === 'number' &&
+          typeof o.count === 'number' &&
+          typeof o.serial === 'string'
+        ) {
+          return {
+            target: o.target,
+            count: Math.max(0, o.count),
+            serial: o.serial,
+            won: !!o.won,
+          };
+        }
+      }
+    } catch (e) {
+      /* ignore */
+    }
+    /* Nominal 1M; actual target varies by up to ±100% (uniform 0…2×), minimum 250k */
+    const target = Math.max(250000, Math.round(1000000 * (Math.random() * 2)));
+    const serial = String(Math.floor(Math.random() * 7));
+    const state = { target, count: 0, serial, won: false };
+    try {
+      sessionStorage.setItem(JP_STORAGE_KEY, JSON.stringify(state));
+    } catch (e2) {
+      /* private mode */
+    }
+    return state;
+  }
+
+  const jackpotState = readOrInitJackpotState();
+
+  function showJackpotWinModal() {
+    if (document.querySelector('.easter-prize-overlay')) return;
+    const overlay = document.createElement('div');
+    overlay.className = 'easter-prize-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'easter-prize-title');
+    overlay.innerHTML =
+      '<div class="easter-prize-panel">' +
+      '<h2 id="easter-prize-title" class="easter-prize-title">You found it</h2>' +
+      '<p class="easter-prize-body">Jackpot: <strong>2 free products</strong> on your next qualifying order. ' +
+      'Email <a href="mailto:bandkgroupptyltd@outlook.com?subject=Easter%20competition%20%E2%80%94%20jackpot%20claim">bandkgroupptyltd@outlook.com</a> ' +
+      'or WhatsApp <a href="https://wa.me/27782376257" target="_blank" rel="noopener noreferrer">+27 78 237 6257</a> with the subject line above so we can verify your win.</p>' +
+      '<p class="easter-prize-note">Screenshot this message if helpful. One jackpot per person per promotion period.</p>' +
+      '<button type="button" class="easter-prize-dismiss btn btn-primary">Close</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    const dismiss = overlay.querySelector('.easter-prize-dismiss');
+    function close() {
+      overlay.remove();
+      document.removeEventListener('keydown', onKey);
+    }
+    function onKey(ev) {
+      if (ev.key === 'Escape') close();
+    }
+    document.addEventListener('keydown', onKey);
+    dismiss.addEventListener('click', close);
+    overlay.addEventListener('click', function (ev) {
+      if (ev.target === overlay) close();
+    });
+    dismiss.focus();
+  }
 
   function burstConfetti(clientX, clientY) {
     const n = 72;
@@ -61,6 +137,30 @@
       setTimeout(function () {
         el.remove();
       }, 1500);
+    }
+  }
+
+  function burstConfettiMini(clientX, clientY, n) {
+    const count = n || 16;
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('div');
+      el.className = 'easter-confetti-piece';
+      el.style.background = colors[i % colors.length];
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+      const speed = 40 + Math.random() * 90;
+      const dx = Math.cos(angle) * speed;
+      const dy = Math.sin(angle) * speed - 20 - Math.random() * 40;
+      const rot = (Math.random() - 0.5) * 540;
+      el.style.left = clientX + 'px';
+      el.style.top = clientY + 'px';
+      el.style.setProperty('--dx', dx + 'px');
+      el.style.setProperty('--dy', dy + 'px');
+      el.style.setProperty('--rot', rot + 'deg');
+      el.style.animation = 'easter-confetti-fall 1s ease-out forwards';
+      document.body.appendChild(el);
+      setTimeout(function () {
+        el.remove();
+      }, 1100);
     }
   }
 
@@ -193,7 +293,48 @@
     }
   }
 
+  function attachJackpotEgg(btn) {
+    let firstClick = true;
+    btn.addEventListener('click', function onJackpotClick() {
+      if (jackpotState.won || btn.classList.contains('easter-egg--spent')) return;
+      const r = btn.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      if (firstClick) {
+        burstConfetti(cx, cy);
+        firstClick = false;
+      } else if (Math.random() < 0.003) {
+        burstConfettiMini(cx, cy, 12);
+      }
+      jackpotState.count += 1;
+      try {
+        sessionStorage.setItem(JP_STORAGE_KEY, JSON.stringify(jackpotState));
+      } catch (e) {
+        /* ignore */
+      }
+      if (jackpotState.count >= jackpotState.target) {
+        jackpotState.won = true;
+        try {
+          sessionStorage.setItem(JP_STORAGE_KEY, JSON.stringify(jackpotState));
+        } catch (e2) {
+          /* ignore */
+        }
+        if (typeof btn._easterStopWander === 'function') btn._easterStopWander();
+        burstConfetti(cx, cy);
+        showJackpotWinModal();
+        btn.classList.add('easter-egg--spent');
+        eggsPopped += 1;
+        replenishEggsAfterPop();
+      }
+    });
+  }
+
   function attachEggBurst(btn) {
+    const serial = btn.dataset.easterEgg;
+    if (!jackpotState.won && serial === jackpotState.serial) {
+      attachJackpotEgg(btn);
+      return;
+    }
     btn.addEventListener(
       'click',
       function () {

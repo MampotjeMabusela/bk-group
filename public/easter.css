@@ -77,9 +77,10 @@ body.easter-active .site-footer {
 
 .easter-festival-banner__title {
   margin: 0;
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: clamp(1.05rem, 3vw, 1.32rem);
   font-weight: 700;
+  letter-spacing: -0.02em;
   background: linear-gradient(90deg, #fef9c3, #fde047, #fbcfe8, #c4b5fd);
   -webkit-background-clip: text;
   background-clip: text;
@@ -521,6 +522,22 @@ body.easter-active .site-footer {
   }
 }
 
+/* Footer competition line (above Easter wishes) */
+.easter-footer-competition {
+  position: relative;
+  z-index: 2;
+  margin: 0 auto 0.5rem;
+  max-width: 720px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(253, 224, 71, 0.92);
+  text-shadow: 0 0 20px rgba(124, 58, 237, 0.35);
+}
+
 /* Footer mini banner */
 .easter-footer-banner {
   position: relative;
@@ -536,6 +553,63 @@ body.easter-active .site-footer {
   background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.25), transparent);
   border-radius: 12px;
   border: 1px solid rgba(196, 181, 253, 0.25);
+}
+
+/* Jackpot win (only appears after hidden threshold; not advertised in UI) */
+.easter-prize-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(12, 10, 24, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.easter-prize-panel {
+  max-width: 26rem;
+  width: 100%;
+  padding: 1.5rem 1.35rem;
+  border-radius: 16px;
+  background: linear-gradient(160deg, #1e1b2e 0%, #12101c 100%);
+  border: 1px solid rgba(196, 181, 253, 0.35);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(253, 224, 71, 0.12);
+}
+
+.easter-prize-title {
+  margin: 0 0 0.75rem;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fef9c3;
+}
+
+.easter-prize-body {
+  margin: 0 0 0.75rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(226, 232, 240, 0.92);
+}
+
+.easter-prize-body a {
+  color: #fde047;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.easter-prize-note {
+  margin: 0 0 1.1rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.easter-prize-dismiss {
+  width: 100%;
 }
 
 /* Product card Easter pricing (used from app markup) */

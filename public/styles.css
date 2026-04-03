@@ -1,4 +1,8 @@
 :root {
+  /* Tech / industrial typography (geometric display + neutral UI) */
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+
   --bg: #151521;
   --bg-card: #242235;
   --bg-input: #2b2940;
@@ -67,7 +71,8 @@ html {
 
 body {
   margin: 0;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
+  font-feature-settings: "liga" 1, "kern" 1;
   background: var(--bg);
   background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(233, 69, 96, 0.15), transparent),
     radial-gradient(ellipse 60% 40% at 100% 50%, rgba(0, 217, 255, 0.08), transparent),
@@ -149,11 +154,11 @@ body {
 
 .tagline {
   margin: 0.875rem 0 1.25rem;
-  font-family: 'Playfair Display', serif;
-  font-size: 0.7rem;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 0.35em;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.32em;
   text-transform: uppercase;
 }
 
@@ -165,11 +170,12 @@ body {
 }
 
 .nav-link {
+  font-family: var(--font-display);
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: 0.5rem 0;
   border-bottom: 1px solid transparent;
@@ -284,8 +290,10 @@ body {
 
 .new-arrivals-title {
   margin: 0 0 0.35rem;
-  font-size: 1.7rem;
+  font-family: var(--font-display);
+  font-size: 1.65rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
   background: linear-gradient(90deg, #ffffff, var(--gold));
   -webkit-background-clip: text;
   background-clip: text;
@@ -369,8 +377,10 @@ body {
 
 .new-arrivals-name {
   margin: 0 0 0.2rem;
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
 .new-arrivals-desc {
@@ -427,8 +437,10 @@ body {
 
 .products-header h2 {
   margin: 0;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
   background: linear-gradient(90deg, var(--text), var(--gold));
   -webkit-background-clip: text;
   background-clip: text;
@@ -767,8 +779,10 @@ body.lightbox-open {
 
 .product-name {
   margin: 0 0 0.25rem;
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   line-height: 1.3;
 }
 
@@ -870,9 +884,10 @@ body.lightbox-open {
   padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 8px;
-  font-family: inherit;
-  font-size: 0.95rem;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
   text-decoration: none;
   transition: background 0.2s, transform 0.1s;
@@ -942,7 +957,10 @@ body.lightbox-open {
 #page-cart h2,
 #page-checkout h2 {
   margin: 0 0 1rem;
+  font-family: var(--font-display);
   font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .cart-empty {
@@ -978,8 +996,10 @@ body.lightbox-open {
 }
 
 .cart-item-name {
+  font-family: var(--font-display);
   font-weight: 600;
   margin: 0 0 0.25rem;
+  letter-spacing: -0.015em;
 }
 
 .cart-item-desc {
@@ -1128,11 +1148,13 @@ body.lightbox-open {
 }
 
 .success-title {
-  font-size: 1.25rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
   font-weight: 700;
   margin: 0 0 0.75rem;
   color: var(--gold);
   text-align: center;
+  letter-spacing: -0.02em;
 }
 
 .order-success p {
@@ -1189,9 +1211,10 @@ body.lightbox-open {
 
 .footer-label {
   display: block;
-  font-size: 0.7rem;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 0.35rem;
@@ -1313,8 +1336,10 @@ body.lightbox-open {
 /* ========== Testimonials ========== */
 .section-title {
   margin: 0 0 0.35rem;
-  font-size: 1.75rem;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
   font-weight: 700;
+  letter-spacing: -0.03em;
   background: linear-gradient(90deg, var(--text), var(--gold));
   -webkit-background-clip: text;
   background-clip: text;
@@ -1663,8 +1688,10 @@ body:has(.back-to-top.visible) .chat-widget {
 
 .chat-title {
   margin: 0;
-  font-size: 1rem;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
 
@@ -1796,8 +1823,10 @@ body:has(.back-to-top.visible) .chat-widget {
 }
 
 .terms-content h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   color: var(--gold);
   margin: 1.5rem 0 0.5rem;
 }
