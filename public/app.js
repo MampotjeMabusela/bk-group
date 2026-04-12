@@ -4,6 +4,43 @@ const BUSINESS_WHATSAPP_NUMBER = '27782376257';
 let products = [];
 let cart = [];
 
+let productsLoading = true;
+let productsLoadError = false;
+let lastQuotationContext = null;
+let lightboxReturnFocus = null;
+
+const DEFAULT_DOCUMENT_TITLE = "B & K Group – PHUSHA S'MOKOLO";
+const PAGE_META = {
+  shop: {
+    title: 'Shop — B & K Group',
+    desc: 'Browse genuine leather shoes, vellies, boots, and sandals. PHUSHA S\'MOKOLO — Made in South Africa.',
+  },
+  cart: {
+    title: 'Your cart — B & K Group',
+    desc: 'Review your items and request a free PDF quotation.',
+  },
+  checkout: {
+    title: 'Checkout — B & K Group',
+    desc: 'Enter your details to download a quotation for your cart.',
+  },
+  testimonials: {
+    title: 'Testimonials — B & K Group',
+    desc: 'What customers say about B & K Group footwear and service.',
+  },
+  feedback: {
+    title: 'Feedback — B & K Group',
+    desc: 'Send us your feedback, suggestions, or questions.',
+  },
+  terms: {
+    title: 'Terms — B & K Group',
+    desc: 'Terms and conditions for using the B & K Group website and orders.',
+  },
+  privacy: {
+    title: 'Privacy — B & K Group',
+    desc: 'How B & K Group handles your personal information.',
+  },
+};
+
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => el.querySelectorAll(sel);
 
@@ -41,15 +78,43 @@ function updateLightboxImage() {
   if (next) next.hidden = !multi;
 }
 
+function getLightboxFocusableElements() {
+  const root = $('#imageLightbox');
+  if (!root || root.hidden) return [];
+  const sel = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  return Array.from(root.querySelectorAll(sel)).filter((node) => node.offsetParent !== null || node === root.querySelector('.image-lightbox-close'));
+}
+
+function lightboxTrapKeydown(e) {
+  const box = $('#imageLightbox');
+  if (!box || box.hidden) return;
+  if (e.key !== 'Tab') return;
+  const nodes = getLightboxFocusableElements();
+  if (nodes.length === 0) return;
+  const first = nodes[0];
+  const last = nodes[nodes.length - 1];
+  if (e.shiftKey) {
+    if (document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    }
+  } else if (document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+}
+
 function openImageLightbox(images, index, productName) {
   lightboxImages = images.slice();
   lightboxIndex = Math.max(0, Math.min(index, Math.max(0, lightboxImages.length - 1)));
   lightboxProductName = productName || '';
   const el = $('#imageLightbox');
   if (!el || lightboxImages.length === 0) return;
+  lightboxReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   el.hidden = false;
   document.body.classList.add('lightbox-open');
   updateLightboxImage();
+  document.addEventListener('keydown', lightboxTrapKeydown, true);
   $('#imageLightboxClose')?.focus();
 }
 
@@ -57,7 +122,12 @@ function closeImageLightbox() {
   const el = $('#imageLightbox');
   if (el) el.hidden = true;
   document.body.classList.remove('lightbox-open');
+  document.removeEventListener('keydown', lightboxTrapKeydown, true);
   lightboxImages = [];
+  if (lightboxReturnFocus && typeof lightboxReturnFocus.focus === 'function') {
+    lightboxReturnFocus.focus();
+  }
+  lightboxReturnFocus = null;
 }
 
 function stepLightbox(delta) {
@@ -116,6 +186,126 @@ function formatPrice(amount) {
   return 'ZAR ' + Number(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+function getSizeStockStatus(product, size) {
+  const map = product.stockBySize;
+  if (!map || typeof map !== 'object') return 'in';
+  const k = String(size);
+  const v = map[k] ?? map[String(Number(k))];
+  if (v === 'out' || v === 'low') return v;
+  return 'in';
+}
+
+function productImgAttrs(src) {
+  const s = escapeAttr(src);
+  return (
+    ` src="${s}" srcset="${s} 320w, ${s} 640w, ${s} 960w" sizes="(max-width: 520px) 92vw, (max-width: 1100px) 45vw, 320px" width="640" height="640" loading="lazy" decoding="async"`
+  );
+}
+
+function getPageIdFromUrl() {
+  const p = new URLSearchParams(window.location.search).get('page');
+  if (p && $(`#page-${p}`)) return p;
+  return 'shop';
+}
+
+function getProductIdFromUrl() {
+  const q = new URLSearchParams(window.location.search);
+  return q.get('product') || q.get('id');
+}
+
+function setBrowserUrl(pageId, extra) {
+  const u = new URL(window.location.href);
+  u.searchParams.set('page', pageId);
+  if (pageId === 'shop' && extra && extra.productId) {
+    u.searchParams.set('product', String(extra.productId));
+  } else {
+    u.searchParams.delete('product');
+    u.searchParams.delete('id');
+  }
+  if (pageId === 'shop' && extra) {
+    if (extra.category) u.searchParams.set('category', extra.category);
+    else u.searchParams.delete('category');
+    if (extra.q) u.searchParams.set('q', extra.q);
+    else u.searchParams.delete('q');
+    if (extra.sort && extra.sort !== 'default') u.searchParams.set('sort', extra.sort);
+    else u.searchParams.delete('sort');
+  } else {
+    u.searchParams.delete('category');
+    u.searchParams.delete('q');
+    u.searchParams.delete('sort');
+  }
+  history.replaceState({}, '', u.pathname + u.search);
+}
+
+function readShopFiltersFromUrl() {
+  const q = new URLSearchParams(window.location.search);
+  return {
+    category: q.get('category') || '',
+    q: q.get('q') || '',
+    sort: q.get('sort') || 'default',
+    productId: q.get('product') || q.get('id') || '',
+  };
+}
+
+function applyPageMeta(pageId) {
+  const m = PAGE_META[pageId];
+  document.title = m ? m.title : DEFAULT_DOCUMENT_TITLE;
+  const meta = $('#metaDescription');
+  if (meta) meta.setAttribute('content', m ? m.desc : PAGE_META.shop.desc);
+}
+
+function getShareableProductUrl(productId) {
+  const u = new URL(window.location.origin + window.location.pathname);
+  u.searchParams.set('page', 'shop');
+  u.searchParams.set('product', String(productId));
+  return u.toString();
+}
+
+function scrollToProductCard(productId) {
+  requestAnimationFrame(() => {
+    const id = String(productId).replace(/[^a-zA-Z0-9_-]/g, '');
+    const card = document.querySelector(`.product-card[data-id="${id}"]`);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('product-card--highlight');
+      setTimeout(() => card.classList.remove('product-card--highlight'), 2400);
+    }
+  });
+}
+
+function buildCartShareText() {
+  if (!cart.length) return '';
+  const lines = cart.map((i) => {
+    const line = `${i.name}${i.size ? ` — size ${i.size}` : ''} × ${i.quantity || 1} — ${formatPrice((i.price || 0) * (i.quantity || 1))}`;
+    return line;
+  });
+  const total = cart.reduce((n, i) => n + (i.price || 0) * (i.quantity || 1), 0);
+  return `My B & K Group cart:\n${lines.join('\n')}\nTotal: ${formatPrice(total)}`;
+}
+
+function getCartShareWhatsAppUrl() {
+  const text = encodeURIComponent(buildCartShareText());
+  return `https://wa.me/${BUSINESS_WHATSAPP_NUMBER}?text=${text}`;
+}
+
+function getCartShareMailtoUrl() {
+  const body = encodeURIComponent(buildCartShareText());
+  const subject = encodeURIComponent('My cart — B & K Group');
+  return `mailto:bandkgroupptyltd@outlook.com?subject=${subject}&body=${body}`;
+}
+
+function buildQuotationPlainSummary(ctx) {
+  if (!ctx || !ctx.items || !ctx.items.length) return '';
+  const lines = ctx.items.map(
+    (i) => `${i.name}${i.size ? ` size ${i.size}` : ''} × ${i.quantity || 1} — ${formatPrice((i.price || 0) * (i.quantity || 1))}`,
+  );
+  return `Quotation enquiry (PDF downloaded)\n${lines.join('\n')}\nTotal: ${formatPrice(ctx.total)}\nName: ${ctx.customer.name || ''}\nEmail: ${ctx.customer.email || ''}\nPhone: ${ctx.customer.phone || ''}`;
+}
+
+function getQuotationWhatsAppUrl(ctx) {
+  return `https://wa.me/${BUSINESS_WHATSAPP_NUMBER}?text=${encodeURIComponent(buildQuotationPlainSummary(ctx))}`;
+}
+
 function syncCartPricesFromCatalog() {
   if (!products.length) return;
   cart = cart.map((item) => {
@@ -148,13 +338,54 @@ function updateCartCount() {
   if (el) el.textContent = total;
 }
 
-function showPage(pageId) {
+let shopUrlDebounceTimer;
+
+function scheduleShopUrlSync() {
+  clearTimeout(shopUrlDebounceTimer);
+  shopUrlDebounceTimer = setTimeout(() => {
+    if (!$('#page-shop')?.classList.contains('active')) return;
+    const extra = {
+      category: $('#categoryFilter')?.value || '',
+      q: ($('#productSearch')?.value || '').trim(),
+      sort: $('#productSort')?.value || 'default',
+      productId: getProductIdFromUrl() || undefined,
+    };
+    setBrowserUrl('shop', extra);
+  }, 320);
+}
+
+function applyUrlToShopControls() {
+  const f = readShopFiltersFromUrl();
+  const cat = $('#categoryFilter');
+  const search = $('#productSearch');
+  const sort = $('#productSort');
+  if (cat) cat.value = (f.category || '').toLowerCase();
+  if (search) search.value = f.q || '';
+  const allowed = new Set(['default', 'price-asc', 'price-desc', 'name-asc', 'name-desc']);
+  if (sort) sort.value = allowed.has(f.sort) ? f.sort : 'default';
+}
+
+function showPage(pageId, opts) {
   $$('.page').forEach(p => p.classList.remove('active'));
   $$('.nav-link').forEach(l => l.classList.remove('active'));
   const page = $(`#page-${pageId}`);
   const link = $(`.nav-link[data-page="${pageId}"]`);
   if (page) page.classList.add('active');
   if (link) link.classList.add('active');
+  applyPageMeta(pageId);
+  if (!opts?.skipUrlSync) {
+    if (pageId === 'shop') {
+      const extra = {
+        category: $('#categoryFilter')?.value || '',
+        q: ($('#productSearch')?.value || '').trim(),
+        sort: $('#productSort')?.value || 'default',
+        productId: getProductIdFromUrl() || undefined,
+      };
+      setBrowserUrl('shop', extra);
+    } else {
+      setBrowserUrl(pageId, {});
+    }
+  }
   if (pageId === 'shop') renderProducts();
   if (pageId === 'cart') renderCart();
   if (pageId === 'checkout') renderCheckout();
@@ -162,38 +393,126 @@ function showPage(pageId) {
 
 function renderProducts() {
   const grid = $('#productGrid');
-  const category = $('#categoryFilter')?.value || '';
   if (!grid) return;
-  const filtered = category
-    ? products.filter(p => (p.category || '').toLowerCase() === category.toLowerCase())
-    : products;
+
+  if (productsLoading) {
+    grid.innerHTML = Array.from({ length: 8 }, () => '<li class="product-skeleton" aria-hidden="true"><div class="product-skeleton-img"></div><div class="product-skeleton-line"></div><div class="product-skeleton-line product-skeleton-line--short"></div></li>').join('');
+    return;
+  }
+
+  if (productsLoadError) {
+    grid.innerHTML =
+      '<li class="product-grid-error" role="alert">' +
+      '<p class="product-grid-error-title">We couldn’t load the catalogue</p>' +
+      '<p class="product-grid-error-text">Check your connection and try again.</p>' +
+      '<button type="button" class="btn btn-primary" id="productGridRetry">Retry</button>' +
+      '</li>';
+    return;
+  }
+
+  const category = ($('#categoryFilter')?.value || '').toLowerCase();
+  const qRaw = ($('#productSearch')?.value || '').trim().toLowerCase();
+  const sort = $('#productSort')?.value || 'default';
+
+  let filtered = category
+    ? products.filter((p) => (p.category || '').toLowerCase() === category)
+    : products.slice();
+
+  if (qRaw) {
+    filtered = filtered.filter((p) => {
+      const hay = `${p.name || ''} ${p.description || ''} ${p.category || ''}`.toLowerCase();
+      return hay.includes(qRaw);
+    });
+  }
+
+  const byPrice = (a, b) => (Number(a.price) || 0) - (Number(b.price) || 0);
+  const byName = (a, b) => String(a.name || '').localeCompare(String(b.name || ''), undefined, { sensitivity: 'base' });
+  if (sort === 'price-asc') filtered.sort(byPrice);
+  else if (sort === 'price-desc') filtered.sort((a, b) => -byPrice(a, b));
+  else if (sort === 'name-asc') filtered.sort(byName);
+  else if (sort === 'name-desc') filtered.sort((a, b) => -byName(a, b));
+
+  if (filtered.length === 0) {
+    grid.innerHTML =
+      '<li class="product-grid-empty" role="status">' +
+      '<p class="product-grid-empty-title">No shoes match your filters</p>' +
+      '<p class="product-grid-empty-text">Try another search or choose “All” categories.</p>' +
+      '</li>';
+    return;
+  }
+
+  const deepId = getProductIdFromUrl();
+
   grid.innerHTML = filtered.map((p, i) => {
     const orig = p.originalPrice ? `<span class="product-original">${formatPrice(p.originalPrice)}</span>` : '';
     const sizes = p.sizes && p.sizes.length ? p.sizes : [];
-    const sizeOptions = sizes.map(s => `<option value="${s}">${s}</option>`).join('');
-    const sizeSelect = sizes.length ? `
+    let defaultSize = null;
+    sizes.forEach((s) => {
+      if (defaultSize == null && getSizeStockStatus(p, s) !== 'out') defaultSize = s;
+    });
+    const sizeOptions = sizes
+      .map((s) => {
+        const st = getSizeStockStatus(p, s);
+        const disabled = st === 'out';
+        const suffix = st === 'out' ? ' — out of stock' : st === 'low' ? ' — low stock' : '';
+        const sel = defaultSize != null && String(s) === String(defaultSize) ? ' selected' : '';
+        return `<option value="${s}"${disabled ? ' disabled' : ''}${sel}>${s}${suffix}</option>`;
+      })
+      .join('');
+    const sizeSelect = sizes.length
+      ? `
       <div class="product-size-wrap">
         <label for="size-${p.id}">Size</label>
-        <select id="size-${p.id}" class="product-size" data-id="${p.id}" aria-label="Size">${sizeOptions}</select>
-      </div>` : '';
+        <select id="size-${p.id}" class="product-size" data-id="${p.id}" aria-label="Size for ${escapeAttr(p.name)}">${sizeOptions}</select>
+      </div>`
+      : '';
     const imgs = getProductImages(p);
     const imagesAttr = escapeAttr(JSON.stringify(imgs));
-    const navHtml = imgs.length > 1 ? `
+    const navHtml =
+      imgs.length > 1
+        ? `
       <button type="button" class="gallery-nav gallery-prev" data-gallery-nav="${escapeAttr(p.id)}" data-dir="-1" aria-label="Previous image">‹</button>
-      <button type="button" class="gallery-nav gallery-next" data-gallery-nav="${escapeAttr(p.id)}" data-dir="1" aria-label="Next image">›</button>` : '';
-    const fitContain = String(p.id) === '1' || String(p.id) === '2' || String(p.id) === '3' || String(p.id) === '4' || String(p.id) === '5' || String(p.id) === '6' || String(p.id) === '7' || String(p.id) === '8' || String(p.id) === '9' || String(p.id) === '10' || String(p.id) === '11' || String(p.id) === '12' || String(p.id) === '13' || String(p.id) === '14' || String(p.id) === '15' || String(p.id) === '16' || String(p.id) === '17' || String(p.id) === '18' || String(p.id) === '19' || String(p.id) === '20' || String(p.id) === '21' || String(p.id) === '22';
+      <button type="button" class="gallery-nav gallery-next" data-gallery-nav="${escapeAttr(p.id)}" data-dir="1" aria-label="Next image">›</button>`
+        : '';
+    const fitContain =
+      String(p.id) === '1' ||
+      String(p.id) === '2' ||
+      String(p.id) === '3' ||
+      String(p.id) === '4' ||
+      String(p.id) === '5' ||
+      String(p.id) === '6' ||
+      String(p.id) === '7' ||
+      String(p.id) === '8' ||
+      String(p.id) === '9' ||
+      String(p.id) === '10' ||
+      String(p.id) === '11' ||
+      String(p.id) === '12' ||
+      String(p.id) === '13' ||
+      String(p.id) === '14' ||
+      String(p.id) === '15' ||
+      String(p.id) === '16' ||
+      String(p.id) === '17' ||
+      String(p.id) === '18' ||
+      String(p.id) === '19' ||
+      String(p.id) === '20' ||
+      String(p.id) === '21' ||
+      String(p.id) === '22';
+    const img0 = imgs[0] || '';
     const imageBlock = `
         <div class="product-image-wrap${imgs.length > 1 ? ' product-image-wrap--gallery' : ''}${fitContain ? ' product-image-wrap--contain' : ''}" data-product-gallery="${escapeAttr(p.id)}" data-images="${imagesAttr}" data-index="0" data-product-name="${escapeAttr(p.name)}">
           ${navHtml}
           <button type="button" class="gallery-zoom" data-gallery-open="${escapeAttr(p.id)}" aria-label="View larger: ${escapeAttr(p.name)}" title="Click to see full size">
-            <img src="${escapeAttr(imgs[0] || '')}" alt="${escapeAttr(p.name)}" class="product-gallery-img" loading="lazy" />
+            <img class="product-gallery-img" alt="${escapeAttr(p.name)}"${productImgAttrs(img0)} />
           </button>
         </div>`;
     return `
-      <li class="product-card" data-id="${p.id}" style="animation-delay: ${i * 0.06}s">
+      <li class="product-card" data-id="${p.id}" style="animation-delay: ${i * 0.05}s">
         ${imageBlock}
         <div class="product-info">
-          <h3 class="product-name">${p.name}</h3>
+          <div class="product-card-top">
+            <h3 class="product-name">${p.name}</h3>
+            <button type="button" class="btn btn-ghost btn-copy-link" data-copy-product-link="${escapeAttr(p.id)}" title="Copy link to this product" aria-label="Copy link to ${escapeAttr(p.name)}">Copy link</button>
+          </div>
           <p class="product-desc">${p.description}</p>
           <div class="product-price-wrap">
             <span class="product-price">${formatPrice(p.price)}</span>${orig}
@@ -210,6 +529,10 @@ function renderProducts() {
         </div>
       </li>`;
   }).join('');
+
+  if (deepId && filtered.some((p) => String(p.id) === String(deepId))) {
+    scrollToProductCard(deepId);
+  }
 }
 
 function getSelectedSize(productId) {
@@ -220,13 +543,35 @@ function getSelectedSize(productId) {
 function handleProductGridClick(e) {
   if (handleProductGalleryInteraction(e)) return;
   const grid = $('#productGrid');
+  const copyBtn = e.target.closest('[data-copy-product-link]');
+  if (copyBtn && grid?.contains(copyBtn)) {
+    const pid = copyBtn.getAttribute('data-copy-product-link');
+    const url = getShareableProductUrl(pid);
+    const done = () => {
+      const t = copyBtn.textContent;
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => { copyBtn.textContent = t; }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done).catch(() => {
+        window.prompt('Copy this link:', url);
+      });
+    } else {
+      window.prompt('Copy this link:', url);
+    }
+    return;
+  }
   const btn = e.target.closest('[data-action][data-id]');
   if (!btn || !grid) return;
   const id = btn.dataset.id;
   const action = btn.dataset.action;
-  const product = products.find(p => p.id === id);
+  const product = products.find((p) => p.id === id);
   if (!product) return;
   const size = getSelectedSize(id);
+  if (size && getSizeStockStatus(product, size) === 'out') {
+    alert('That size is out of stock. Please pick another size.');
+    return;
+  }
   if (action === 'add' || action === 'inc') {
     addToCart(product, 1, size);
     const span = $(`[data-qty="${id}"]`, grid);
@@ -258,6 +603,7 @@ function addToCart(product, delta = 1, size = null) {
     }
   } else {
     if (delta <= 0) return;
+    if (sizeStr && getSizeStockStatus(product, sizeStr) === 'out') return;
     next = [...cart, { ...product, price: Number(product.price) || 0, quantity: 1, size: sizeStr || undefined }];
   }
   setCart(next);
@@ -294,21 +640,10 @@ function renderCart() {
 
   const total = cart.reduce((n, i) => n + (i.price || 0) * (i.quantity || 1), 0);
   $('#cartTotal').textContent = formatPrice(total);
-
-  list.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-cart][data-id]');
-    if (!btn) return;
-    const id = btn.dataset.id;
-    const size = btn.dataset.size != null ? String(btn.dataset.size) : null;
-    const action = btn.dataset.cart;
-    const product = products.find(p => p.id === id) || cart.find(i => i.id === id && String(i.size || '') === String(size || ''));
-    if (!product) return;
-    const cartKey = (i) => i.id === id && String(i.size || '') === String(size || '');
-    if (action === 'remove') setCart(cart.filter(i => !cartKey(i)));
-    else if (action === 'dec') addToCart(product, -1, size);
-    else if (action === 'inc') addToCart(product, 1, size);
-    renderCart();
-  });
+  const wa = $('#cartShareWa');
+  const mail = $('#cartShareMail');
+  if (wa) wa.href = getCartShareWhatsAppUrl();
+  if (mail) mail.href = getCartShareMailtoUrl();
 }
 
 function renderCheckout() {
@@ -332,18 +667,59 @@ function renderCheckout() {
 }
 
 async function loadProducts() {
+  productsLoading = true;
+  productsLoadError = false;
+  if ($('#page-shop')?.classList.contains('active')) renderProducts();
   try {
     const res = await fetch(`${API}/products`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     products = await res.json();
+    productsLoadError = false;
   } catch (err) {
     console.error('Failed to load products', err);
     products = [];
+    productsLoadError = true;
+  } finally {
+    productsLoading = false;
   }
 }
 
+function handleCartPageClick(e) {
+  const btn = e.target.closest('[data-cart][data-id]');
+  if (!btn || !$('#cartList')?.contains(btn)) return;
+  const id = btn.dataset.id;
+  const size = btn.dataset.size != null ? String(btn.dataset.size) : null;
+  const action = btn.dataset.cart;
+  const product =
+    products.find((p) => p.id === id) ||
+    cart.find((i) => i.id === id && String(i.size || '') === String(size || ''));
+  if (!product) return;
+  if (action === 'inc' && size && getSizeStockStatus(product, size) === 'out') {
+    alert('That size is out of stock. Remove it or choose another product.');
+    return;
+  }
+  const cartKey = (i) => i.id === id && String(i.size || '') === String(size || '');
+  if (action === 'remove') setCart(cart.filter((i) => !cartKey(i)));
+  else if (action === 'dec') addToCart(product, -1, size);
+  else if (action === 'inc') addToCart(product, 1, size);
+  renderCart();
+}
+
 function init() {
+  applyUrlToShopControls();
+  showPage(getPageIdFromUrl(), { skipUrlSync: true });
+
+  window.addEventListener('popstate', () => {
+    applyUrlToShopControls();
+    showPage(getPageIdFromUrl(), { skipUrlSync: true });
+  });
+
   cart = getCart();
   updateCartCount();
+
+  $('.skip-link')?.addEventListener('click', () => {
+    $('#main-content')?.focus({ preventScroll: true });
+  });
 
   document.addEventListener('click', (e) => {
     const link = e.target.closest('a[data-page]');
@@ -353,8 +729,31 @@ function init() {
     }
   });
 
-  $('#categoryFilter')?.addEventListener('change', () => renderProducts());
-  $('#productGrid')?.addEventListener('click', handleProductGridClick);
+  $('#page-cart')?.addEventListener('click', handleCartPageClick);
+
+  $('#categoryFilter')?.addEventListener('change', () => {
+    renderProducts();
+    scheduleShopUrlSync();
+  });
+  $('#productSearch')?.addEventListener('input', () => {
+    renderProducts();
+    scheduleShopUrlSync();
+  });
+  $('#productSort')?.addEventListener('change', () => {
+    renderProducts();
+    scheduleShopUrlSync();
+  });
+  $('#productGrid')?.addEventListener('click', (e) => {
+    if (e.target.id === 'productGridRetry' || e.target.closest('#productGridRetry')) {
+      e.preventDefault();
+      loadProducts().then(() => {
+        syncCartPricesFromCatalog();
+        renderProducts();
+      });
+      return;
+    }
+    handleProductGridClick(e);
+  });
 
   $('#imageLightboxClose')?.addEventListener('click', () => closeImageLightbox());
   $$('[data-lightbox-close]').forEach((el) => {
@@ -407,8 +806,22 @@ function init() {
       a.download = `B-K-Group-Quotation-${Date.now()}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
+      const total = cart.reduce((n, i) => n + (i.price || 0) * (i.quantity || 1), 0);
+      lastQuotationContext = {
+        items: cart.map((i) => ({
+          name: i.name,
+          price: i.price,
+          quantity: i.quantity || 1,
+          size: i.size || null,
+        })),
+        customer,
+        total,
+      };
+      const qw = $('#quotationWhatsAppPrefill');
+      if (qw) qw.href = getQuotationWhatsAppUrl(lastQuotationContext);
       form.hidden = true;
       $('#orderSuccess').hidden = false;
+      $('#quotationWhatsAppPrefill')?.focus();
       setCart([]);
     } catch (err) {
       alert(err.message || 'Could not generate quotation. Please try again.');
@@ -574,7 +987,7 @@ function init() {
       if (has('terms', 'conditions')) return "Click “Terms & Conditions” at the bottom of the page to read our terms.";
     }
     if (has('shop', 'products', 'browse', 'where to buy', 'navigate', 'menu')) {
-      return "Use the menu at the top: Shop shows all shoes, Testimonials has customer reviews, Feedback lets you send us a message, and Cart is where you see your items and get a quotation.";
+      return "Use the menu at the top: Shop lists all shoes with search, sort, and category filters. Testimonials has reviews, Feedback sends us a message, and Cart is where you get your PDF quotation.";
     }
 
     // Product suggestions by category
@@ -645,15 +1058,36 @@ function init() {
     setChatLoading(false);
   }
 
+  const ldEl = $('#storeJsonLd');
+  if (ldEl && ldEl.textContent) {
+    try {
+      const data = JSON.parse(ldEl.textContent);
+      data.url = `${window.location.origin}${window.location.pathname}`;
+      ldEl.textContent = JSON.stringify(data);
+    } catch {
+      /* ignore */
+    }
+  }
+
   if (chatToggle && chatPanel) {
     chatToggle.addEventListener('click', () => {
       const isHidden = chatPanel.hidden;
       chatPanel.hidden = !isHidden;
-      if (isHidden) showChatWelcome();
+      chatToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+      if (isHidden) {
+        showChatWelcome();
+        $('#chatInput')?.focus();
+      } else {
+        chatToggle.focus();
+      }
     });
   }
   if (chatClose && chatPanel) {
-    chatClose.addEventListener('click', () => { chatPanel.hidden = true; });
+    chatClose.addEventListener('click', () => {
+      chatPanel.hidden = true;
+      chatToggle?.setAttribute('aria-expanded', 'false');
+      chatToggle?.focus();
+    });
   }
   if (chatSend && chatInput) {
     chatSend.addEventListener('click', sendChatMessage);
@@ -661,6 +1095,14 @@ function init() {
       if (e.key === 'Enter') { e.preventDefault(); sendChatMessage(); }
     });
   }
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !chatPanel || chatPanel.hidden) return;
+    const lb = $('#imageLightbox');
+    if (lb && !lb.hidden) return;
+    chatPanel.hidden = true;
+    chatToggle?.setAttribute('aria-expanded', 'false');
+    chatToggle?.focus();
+  });
   if (window.speechSynthesis) {
     window.speechSynthesis.getVoices();
     document.addEventListener('DOMContentLoaded', () => window.speechSynthesis.getVoices());

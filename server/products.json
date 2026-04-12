@@ -1,6 +1,6 @@
 [
   {"id":"1","name":"#1 AKA Vellies Tan","description":"Tan Leather Vellies (size 4 to 8)","price":749.99,"originalPrice":null,"image":"/images/product-1-1.png","images":["/images/product-1-1.png","/images/product-1-2.png"],"category":"vellies","sizes":[4,5,6,7,8]},
-  {"id":"2","name":"#2 Ladies leather slip-ons","description":"Leather slip ons","price":440,"originalPrice":550,"image":"/images/product-2.png","category":"slip-on","sizes":[3,4,5,6,7,8]},
+  {"id":"2","name":"#2 Ladies leather slip-ons","description":"Leather slip ons","price":440,"originalPrice":550,"image":"/images/product-2.png","category":"slip-on","sizes":[3,4,5,6,7,8],"stockBySize":{"3":"out","6":"low"}},
   {"id":"3","name":"#3 Hi-cut leather Vellies","description":"Hi-cut leather Vellies","price":480,"originalPrice":600,"image":"/images/product-3.png","category":"vellies","sizes":[4,5,6,7,8]},
   {"id":"4","name":"#4 Safari Vellies","description":"Safari suede Vellies","price":527.99,"originalPrice":659.99,"image":"/images/product-4-1.png","images":["/images/product-4-1.png","/images/product-4-2.png","/images/product-4-3.png"],"category":"vellies","sizes":[4,5,6,7,8]},
   {"id":"5","name":"#5 Men's Olive Leather Vellies","description":"Men's Olive Leather Vellies (size 6 to 11)","price":850,"originalPrice":null,"image":"/images/product-5-1.png","images":["/images/product-5-1.png","/images/product-5-2.png"],"category":"vellies","sizes":[6,7,8,9,10,11]},
@@ -10,7 +10,7 @@
   {"id":"9","name":"#9 Hydrate Vellies","description":"Red Suede Vellies (size 4 to 8)","price":659.99,"originalPrice":null,"image":"/images/product-9.png","category":"vellies","sizes":[4,5,6,7,8]},
   {"id":"10","name":"#10 Hydrate Vellies","description":"Black Suede Vellies (size 4 to 8)","price":659.99,"originalPrice":null,"image":"/images/product-10.png","category":"vellies","sizes":[4,5,6,7,8]},
   {"id":"11","name":"#11 Burgundy Safari Vellies","description":"Burgundy Suede Vellies (size 4 to 8)","price":659.99,"originalPrice":null,"image":"/images/product-11.png","category":"vellies","sizes":[4,5,6,7,8]},
-  {"id":"12","name":"#12 Safari Red Vellies","description":"Safari red suede vellies with tan sole and laces; embossed heel logo (sizes 4–8).","price":659.99,"originalPrice":null,"image":"/images/product-12.png","images":["/images/product-12.png"],"category":"vellies","sizes":[4,5,6,7,8]},
+  {"id":"12","name":"#12 Safari Red Vellies","description":"Safari red suede vellies with tan sole and laces; embossed heel logo (sizes 4–8).","price":659.99,"originalPrice":null,"image":"/images/product-12.png","images":["/images/product-12.png"],"category":"vellies","sizes":[4,5,6,7,8],"stockBySize":{"8":"low"}},
   {"id":"13","name":"#13 Hygrade suede Vellies","description":"Suede Leather Vellies","price":659.99,"originalPrice":null,"image":"/images/product-13-1.png","images":["/images/product-13-1.png","/images/product-13-2.png","/images/product-13-3.png"],"category":"vellies","sizes":[4,5,6,7,8]},
   {"id":"14","name":"#14 Safari Vellies","description":"Brown Vellies","price":659.99,"originalPrice":null,"image":"/images/product-14-1.png","images":["/images/product-14-1.png","/images/product-14-2.png","/images/product-14-3.png","/images/product-14-4.png"],"category":"vellies","sizes":[6,7,8,9,10,11]},
   {"id":"15","name":"#15 Ankle boot vellies","description":"Vellies","price":729.99,"originalPrice":null,"image":"/images/product-15-1.png","images":["/images/product-15-1.png","/images/product-15-2.png","/images/product-15-3.png"],"category":"boots","sizes":[3,4,5,6,7,8]},
@@ -29,6 +29,6 @@
   {"id":"28","name":"#28 Hydrade Vellies","description":"Leather Vellies","price":750,"originalPrice":null,"image":"/images/product-28.png","category":"vellies","sizes":[3,4,5,6,7,8]},
   {"id":"29","name":"#29 Hygrade Suede Vellies","description":"Blue Suede Vellies","price":659.99,"originalPrice":null,"image":"/images/product-29.png","category":"vellies","sizes":[4,5,6,7,8]},
   {"id":"30","name":"#30 Hygrade Suede Vellies","description":"Oak Suede Vellies","price":659.99,"originalPrice":null,"image":"/images/product-30.png","category":"vellies","sizes":[3,4,5,6,7,8]},
-  {"id":"31","name":"#31 Ladies Fur Boots","description":"Nubuck Leather size (5-9)","price":799.99,"originalPrice":null,"image":"/images/product-31.png","category":"boots","sizes":[5,6,7,8,9]},
+  {"id":"31","name":"#31 Ladies Fur Boots","description":"Nubuck Leather size (5-9)","price":799.99,"originalPrice":null,"image":"/images/product-31.png","category":"boots","sizes":[5,6,7,8,9],"stockBySize":{"9":"out","7":"low"}},
   {"id":"32","name":"#32 Ladies Fur Short Boots","description":"Nubuck Leather Shoes size (4-9)","price":699.99,"originalPrice":null,"image":"/images/product-32.png","category":"boots","sizes":[4,5,6,7,8,9]}
 ]

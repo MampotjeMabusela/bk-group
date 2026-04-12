@@ -3,13 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" id="metaDescription" content="Browse genuine leather shoes, vellies, boots, and sandals. PHUSHA S'MOKOLO — Made in South Africa." />
   <title>B & K Group – PHUSHA S'MOKOLO</title>
+  <script type="application/ld+json" id="storeJsonLd">
+  {
+    "@context": "https://schema.org",
+    "@type": "ShoeStore",
+    "name": "B & K Group",
+    "alternateName": "PHUSHA S'MOKOLO",
+    "description": "Genuine leather footwear — vellies, boots, sandals, and slip-ons. Made in South Africa.",
+    "telephone": "+27782376257",
+    "email": "bandkgroupptyltd@outlook.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Moreleta Corner, Cnr Garsfontein Rd & Rubenstain Dr, Moreleta Park",
+      "addressLocality": "Pretoria",
+      "addressCountry": "ZA"
+    },
+    "areaServed": "ZA",
+    "priceRange": "$$"
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <header class="site-header">
     <div class="header-hero-bg" role="presentation"></div>
     <div class="header-bg"></div>
@@ -29,7 +50,7 @@
     </div>
   </header>
 
-  <main class="main">
+  <main id="main-content" class="main" tabindex="-1">
     <div class="trust-bar" role="complementary" aria-label="Why choose us">
       <span class="trust-item"><span class="trust-icon" aria-hidden="true">◆</span> Genuine leather</span>
       <span class="trust-item"><span class="trust-icon" aria-hidden="true">◆</span> Made in South Africa</span>
@@ -79,15 +100,29 @@
       </section>
       <div class="products-header">
         <h2>Our Shoes</h2>
-        <div class="filter-wrap">
-          <label for="categoryFilter">Category</label>
-          <select id="categoryFilter">
-            <option value="">All</option>
-            <option value="vellies">Vellies</option>
-            <option value="slip-on">Slip-Ons</option>
-            <option value="boots">Boots</option>
-            <option value="sandals">Sandals</option>
-          </select>
+        <div class="shop-toolbar" role="search">
+          <label class="visually-hidden" for="productSearch">Search products by name or description</label>
+          <input type="search" id="productSearch" class="product-search" placeholder="Search name or description…" autocomplete="off" enterkeyhint="search" />
+          <div class="filter-wrap">
+            <label for="categoryFilter">Category</label>
+            <select id="categoryFilter">
+              <option value="">All</option>
+              <option value="vellies">Vellies</option>
+              <option value="slip-on">Slip-Ons</option>
+              <option value="boots">Boots</option>
+              <option value="sandals">Sandals</option>
+            </select>
+          </div>
+          <div class="filter-wrap">
+            <label for="productSort">Sort</label>
+            <select id="productSort">
+              <option value="default">Catalog order</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="name-asc">Name: A–Z</option>
+              <option value="name-desc">Name: Z–A</option>
+            </select>
+          </div>
         </div>
       </div>
       <ul class="product-grid" id="productGrid"></ul>
@@ -99,6 +134,10 @@
       <ul class="cart-list" id="cartList"></ul>
       <div class="cart-footer" id="cartFooter" hidden>
         <p class="cart-total">Total: <strong id="cartTotal">ZAR 0.00</strong></p>
+        <div class="cart-share-row" id="cartShareRow">
+          <a class="btn btn-secondary" id="cartShareWa" href="#" target="_blank" rel="noopener noreferrer">Send cart on WhatsApp</a>
+          <a class="btn btn-secondary" id="cartShareMail" href="#">Send cart by email</a>
+        </div>
         <button type="button" class="btn btn-primary" id="checkoutBtn">Get quotation</button>
       </div>
     </section>
@@ -130,10 +169,13 @@
       </form>
       <div class="order-success" id="orderSuccess" hidden>
         <p class="success-title">Quotation downloaded</p>
-        <p>Your PDF quotation has been saved. To complete your order:</p>
+        <p class="success-lead">Your PDF quotation has been saved.</p>
+        <p class="success-response" id="quotationResponseNote">We usually respond within <strong>one business day</strong> (often sooner) when you send us your quotation by email or WhatsApp.</p>
+        <p>To complete your order:</p>
         <ul class="success-instructions">
           <li>Email the quotation to <a href="mailto:bandkgroupptyltd@outlook.com?subject=B%20%26%20K%20Group%20-%20quotation%20%2F%20order">bandkgroupptyltd@outlook.com</a> (opens your email app)</li>
           <li>WhatsApp it to <a href="https://wa.me/27782376257">+27 78 237 6257</a></li>
+          <li>Or open WhatsApp with your line items pre-filled: <a href="#" id="quotationWhatsAppPrefill" class="success-wa-prefill" target="_blank" rel="noopener noreferrer">Send these details on WhatsApp</a></li>
           <li>Call <a href="tel:+27782376257">+27 78 237 6257</a></li>
           <li>Visit us at Moreleta Corner, Cnr Garsfontein Rd &amp; Rubenstain Dr, Moreleta Park, Pretoria</li>
         </ul>
@@ -358,7 +400,7 @@
         <button type="button" class="chat-send btn btn-primary" id="chatSend" aria-label="Send">Send</button>
       </div>
     </div>
-    <button type="button" class="chat-toggle" id="chatToggle" aria-label="Open chat assistant" title="Chat with us">
+    <button type="button" class="chat-toggle" id="chatToggle" aria-label="Open chat assistant" aria-expanded="false" aria-controls="chatPanel" title="Chat with us">
       <span class="chat-toggle-icon">💬</span>
     </button>
   </div>
