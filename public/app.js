@@ -116,43 +116,12 @@ function formatPrice(amount) {
   return 'ZAR ' + Number(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-/** Easter tiered promo: cheapest third 20%, middle third 15%, top third 10% (by catalog price). */
-const easterDiscountByProductId = new Map();
-
-function buildEasterDiscounts() {
-  easterDiscountByProductId.clear();
-  if (!products.length) return;
-  const sorted = [...products].sort((a, b) => {
-    const pa = Number(a.price) || 0;
-    const pb = Number(b.price) || 0;
-    if (pa !== pb) return pa - pb;
-    return String(a.id).localeCompare(String(b.id), undefined, { numeric: true });
-  });
-  const n = sorted.length;
-  const aEnd = Math.ceil(n / 3);
-  const bEnd = Math.ceil((2 * n) / 3);
-  sorted.forEach((p, i) => {
-    const f = i < aEnd ? 0.2 : i < bEnd ? 0.15 : 0.1;
-    easterDiscountByProductId.set(String(p.id), f);
-  });
-}
-
-function getEasterDiscountFraction(product) {
-  return easterDiscountByProductId.get(String(product.id)) ?? 0;
-}
-
-function getEasterSalePrice(product) {
-  const base = Number(product.price) || 0;
-  const d = getEasterDiscountFraction(product);
-  return Math.round(base * (1 - d) * 100) / 100;
-}
-
-function syncCartEasterPrices() {
+function syncCartPricesFromCatalog() {
   if (!products.length) return;
   cart = cart.map((item) => {
     const p = products.find((x) => String(x.id) === String(item.id));
     if (!p) return item;
-    return { ...item, price: getEasterSalePrice(p) };
+    return { ...item, price: Number(p.price) || 0 };
   });
   localStorage.setItem('bk-cart', JSON.stringify(cart));
   updateCartCount();
@@ -199,8 +168,6 @@ function renderProducts() {
     ? products.filter(p => (p.category || '').toLowerCase() === category.toLowerCase())
     : products;
   grid.innerHTML = filtered.map((p, i) => {
-    const easterFrac = getEasterDiscountFraction(p);
-    const easterSale = getEasterSalePrice(p);
     const orig = p.originalPrice ? `<span class="product-original">${formatPrice(p.originalPrice)}</span>` : '';
     const sizes = p.sizes && p.sizes.length ? p.sizes : [];
     const sizeOptions = sizes.map(s => `<option value="${s}">${s}</option>`).join('');
@@ -229,9 +196,7 @@ function renderProducts() {
           <h3 class="product-name">${p.name}</h3>
           <p class="product-desc">${p.description}</p>
           <div class="product-price-wrap">
-            ${easterFrac > 0
-    ? `<span class="product-price easter-sale">${formatPrice(easterSale)}</span><span class="product-easter-was">${formatPrice(p.price)}</span>${orig}<span class="easter-pill" aria-label="Easter discount">${Math.round(easterFrac * 100)}% Easter</span>`
-    : `<span class="product-price">${formatPrice(p.price)}</span>${orig}`}
+            <span class="product-price">${formatPrice(p.price)}</span>${orig}
           </div>
           ${sizeSelect}
           <div class="product-actions">
@@ -289,11 +254,11 @@ function addToCart(product, delta = 1, size = null) {
     if (qty === 0) {
       next = cart.filter(i => !(i.id === product.id && String(i.size || '') === sizeStr));
     } else {
-      next = cart.map(i => i.id === product.id && String(i.size || '') === sizeStr ? { ...i, quantity: qty, price: getEasterSalePrice(product) } : i);
+      next = cart.map(i => i.id === product.id && String(i.size || '') === sizeStr ? { ...i, quantity: qty, price: Number(product.price) || 0 } : i);
     }
   } else {
     if (delta <= 0) return;
-    next = [...cart, { ...product, price: getEasterSalePrice(product), quantity: 1, size: sizeStr || undefined }];
+    next = [...cart, { ...product, price: Number(product.price) || 0, quantity: 1, size: sizeStr || undefined }];
   }
   setCart(next);
 }
@@ -329,14 +294,6 @@ function renderCart() {
 
   const total = cart.reduce((n, i) => n + (i.price || 0) * (i.quantity || 1), 0);
   $('#cartTotal').textContent = formatPrice(total);
-  const cartNote = $('#cartEasterNote');
-  if (cartNote) {
-    const hasEaster = cart.some((item) => {
-      const p = products.find((x) => String(x.id) === String(item.id));
-      return p && getEasterDiscountFraction(p) > 0;
-    });
-    cartNote.hidden = !hasEaster;
-  }
 
   list.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-cart][data-id]');
@@ -367,16 +324,11 @@ function renderCheckout() {
     return;
   }
   const total = cart.reduce((n, i) => n + (i.price || 0) * (i.quantity || 1), 0);
-  const easterCheckoutNote = cart.some((item) => {
-    const p = products.find((x) => String(x.id) === String(item.id));
-    return p && getEasterDiscountFraction(p) > 0;
-  });
   summary.innerHTML = `
     <ul>
       ${cart.map(i => `<li>${i.name}${i.size ? ` (Size ${i.size})` : ''} × ${i.quantity || 1} – ${formatPrice((i.price || 0) * (i.quantity || 1))}</li>`).join('')}
     </ul>
-    <div class="total">Total: ${formatPrice(total)}</div>
-    ${easterCheckoutNote ? '<p class="easter-cart-note">Totals include Easter tier savings (20% / 15% / 10% by price band).</p>' : ''}`;
+    <div class="total">Total: ${formatPrice(total)}</div>`;
 }
 
 async function loadProducts() {
@@ -465,8 +417,7 @@ function init() {
   });
 
   loadProducts().then(() => {
-    buildEasterDiscounts();
-    syncCartEasterPrices();
+    syncCartPricesFromCatalog();
     renderProducts();
   });
 
