@@ -109,6 +109,11 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes frostShimmer {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.85; }
+}
+
 @keyframes chatGlowPulse {
   0%, 100% { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 18px var(--accent-glow), 0 0 0 0 rgba(233, 69, 96, 0.35); }
   50% { box-shadow: 0 6px 32px rgba(0, 0, 0, 0.5), 0 0 32px var(--accent-glow), 0 0 0 10px rgba(233, 69, 96, 0); }
@@ -190,6 +195,15 @@ html {
   border: 0;
 }
 
+body.winter-theme {
+  background-image:
+    radial-gradient(ellipse 70% 45% at 50% -15%, rgba(200, 225, 255, 0.1), transparent),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(233, 69, 96, 0.16), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 50%, rgba(0, 217, 255, 0.1), transparent),
+    radial-gradient(ellipse 60% 40% at 0% 80%, rgba(168, 85, 247, 0.08), transparent),
+    linear-gradient(180deg, rgba(12, 18, 32, 0.45) 0%, transparent 35%, rgba(8, 12, 24, 0.5) 100%);
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -226,6 +240,92 @@ body::before {
   filter: blur(0px);
   animation: ambientDrift 22s ease-in-out infinite alternate;
   opacity: 0.95;
+}
+
+body.winter-theme::before {
+  background:
+    radial-gradient(ellipse 55% 35% at 12% 8%, rgba(220, 238, 255, 0.12) 0%, transparent 52%),
+    radial-gradient(ellipse 50% 40% at 15% 25%, rgba(233, 69, 96, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 50% at 88% 18%, rgba(0, 217, 255, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 35% at 70% 92%, rgba(168, 85, 247, 0.1) 0%, transparent 55%);
+}
+
+/* ── Winter snowfall overlay ── */
+.winter-snow {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.winter-snow-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.winter-snow--static::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.08), transparent 38%),
+    radial-gradient(circle at 82% 18%, rgba(220, 238, 255, 0.07), transparent 34%),
+    radial-gradient(circle at 50% 6%, rgba(255, 255, 255, 0.06), transparent 45%);
+}
+
+body.winter-theme .site-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 18%,
+    rgba(210, 232, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.15) 82%,
+    transparent 100%
+  );
+  animation: frostShimmer 6s ease-in-out infinite;
+}
+
+body.winter-theme .header-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(220, 238, 255, 0.07) 0%, transparent 28%),
+    radial-gradient(ellipse 90% 40% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 70%);
+  mix-blend-mode: screen;
+}
+
+body.winter-theme .new-arrivals-inner {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(245, 207, 112, 0.16), transparent 55%),
+    radial-gradient(circle at 100% 0%, rgba(180, 220, 255, 0.14), transparent 55%),
+    linear-gradient(135deg, #1e2432 0%, #2a3548 35%, #4a3020 70%, #18141a 100%);
+  border-color: rgba(220, 238, 255, 0.14);
+  box-shadow:
+    0 18px 60px rgba(0, 0, 0, 0.75),
+    0 0 40px rgba(180, 220, 255, 0.12),
+    0 0 40px rgba(233, 69, 96, 0.28);
+}
+
+body.winter-theme .trust-bar {
+  border-color: rgba(220, 238, 255, 0.1);
+  background: linear-gradient(
+    90deg,
+    rgba(28, 32, 48, 0.92) 0%,
+    rgba(34, 42, 58, 0.95) 50%,
+    rgba(28, 32, 48, 0.92) 100%
+  );
 }
 
 .site-header {
@@ -274,36 +374,36 @@ body::before {
   display: inline-block;
   margin: 0;
   line-height: 0;
-  padding: 0.75rem 1.5rem;
-  border: 1px solid var(--header-border);
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1) 0%, var(--gold-soft) 45%, rgba(0, 0, 0, 0.15) 100%);
-  border-radius: 14px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: background 0.35s var(--ease-out-expo), border-color 0.35s ease, box-shadow 0.35s ease, transform 0.45s var(--ease-spring);
-  transform: translateZ(0);
-  transform-style: preserve-3d;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  transition: transform 0.35s var(--ease-spring);
 }
 
 .logo-link:hover {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.16) 0%, rgba(249, 211, 66, 0.22) 50%, rgba(0, 0, 0, 0.12) 100%);
-  border-color: rgba(249, 211, 66, 0.55);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 40px rgba(249, 211, 66, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.28);
-  transform: translateY(-6px) rotateX(8deg) scale(1.03);
+  background: none;
+  border: none;
+  box-shadow: none;
+  transform: translateY(-3px);
 }
 
 .logo-img {
   display: block;
   width: auto;
-  max-width: min(260px, 78vw);
+  max-width: min(340px, 88vw);
   height: auto;
-  max-height: 72px;
+  max-height: 140px;
   object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 24px rgba(245, 207, 112, 0.2));
-  transition: filter 0.35s ease, transform 0.45s var(--ease-spring);
+  mix-blend-mode: screen;
+  opacity: 0.96;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.28)) drop-shadow(0 0 16px rgba(245, 207, 112, 0.1));
+  transition: filter 0.35s ease, transform 0.35s var(--ease-spring);
 }
 
 .logo-link:hover .logo-img {
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 32px rgba(245, 207, 112, 0.35));
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35)) drop-shadow(0 0 24px rgba(245, 207, 112, 0.22));
+  transform: scale(1.02);
 }
 
 .tagline {
@@ -1308,6 +1408,12 @@ body.lightbox-open {
   border-radius: 8px;
 }
 
+.footer-logo-link:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
 @media (hover: none) {
   .btn,
   .nav-link,
@@ -1633,6 +1739,42 @@ body.lightbox-open {
   border-radius: 999px;
   background: linear-gradient(90deg, transparent, rgba(245, 207, 112, 0.55), rgba(0, 217, 255, 0.4), rgba(233, 69, 96, 0.5), transparent);
   box-shadow: 0 0 24px rgba(245, 207, 112, 0.25);
+}
+
+.footer-logo-link {
+  display: inline-block;
+  margin: 0 auto 1.75rem;
+  line-height: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.footer-logo-link:hover {
+  background: none;
+  border: none;
+  box-shadow: none;
+  transform: translateY(-3px);
+}
+
+.footer-logo-img {
+  display: block;
+  width: auto;
+  max-width: min(300px, 82vw);
+  height: auto;
+  max-height: 120px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  opacity: 0.96;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.28)) drop-shadow(0 0 16px rgba(245, 207, 112, 0.1));
+  transition: filter 0.35s ease, transform 0.35s var(--ease-spring);
+}
+
+.footer-logo-link:hover .footer-logo-img {
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35)) drop-shadow(0 0 24px rgba(245, 207, 112, 0.22));
+  transform: scale(1.02);
 }
 
 .footer-contact {
@@ -2323,13 +2465,9 @@ body:has(.back-to-top.visible) .chat-widget {
     min-height: 22vh;
   }
 
-  .logo-link {
-    padding: 0.5rem 1rem;
-  }
-
   .logo-img {
-    max-height: 56px;
-    max-width: min(220px, 80vw);
+    max-height: 96px;
+    max-width: min(280px, 86vw);
   }
 
   .tagline {
@@ -2655,8 +2793,8 @@ body:has(.back-to-top.visible) .chat-widget {
   }
 
   .logo-img {
-    max-height: 48px;
-    max-width: min(180px, 75vw);
+    max-height: 80px;
+    max-width: min(240px, 82vw);
   }
 
   .tagline {
@@ -2746,7 +2884,13 @@ body:has(.back-to-top.visible) .chat-widget {
 
 @media (max-width: 400px) {
   .logo-img {
-    max-height: 44px;
+    max-height: 72px;
+    max-width: min(220px, 80vw);
+  }
+
+  .footer-logo-img {
+    max-height: 96px;
+    max-width: min(260px, 78vw);
   }
 }
 
@@ -2800,6 +2944,7 @@ body:has(.back-to-top.visible) .chat-widget {
   }
 
   body::before,
+  body.winter-theme .site-header::after,
   .new-arrivals-inner::before,
   .new-arrivals-kicker,
   .product-image-wrap::before,
