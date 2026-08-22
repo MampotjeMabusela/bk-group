@@ -24,28 +24,11 @@ function formatPrice(amount) {
   return 'ZAR ' + Number(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-/** Read width/height from PNG IHDR or JPEG SOF (no extra deps). */
-function imageDimensions(buf) {
+/** Read width/height from PNG IHDR (no extra deps). */
+function pngDimensions(buf) {
   if (!Buffer.isBuffer(buf) || buf.length < 24) return null;
-  if (buf[0] === 0x89 && buf[1] === 0x50) {
-    return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
-  }
-  if (buf[0] === 0xff && buf[1] === 0xd8) {
-    let i = 2;
-    while (i < buf.length - 8) {
-      if (buf[i] !== 0xff) {
-        i += 1;
-        continue;
-      }
-      const marker = buf[i + 1];
-      if (marker === 0xc0 || marker === 0xc2) {
-        return { height: buf.readUInt16BE(i + 5), width: buf.readUInt16BE(i + 7) };
-      }
-      const len = buf.readUInt16BE(i + 2);
-      i += 2 + len;
-    }
-  }
-  return null;
+  if (buf[0] !== 0x89 || buf[1] !== 0x50) return null;
+  return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
 }
 
 function buildQuotationPDF({ items, customer }, callback) {
@@ -64,15 +47,11 @@ function buildQuotationPDF({ items, customer }, callback) {
   const logoPath = path.join(__dirname, '..', 'public', 'images', 'logo.png');
   let y = margin;
 
-  function logoHeightForWidth(buf, width) {
-    const dims = imageDimensions(buf);
-    return dims ? (width * dims.height) / dims.width : width;
-  }
-
   if (fs.existsSync(logoPath)) {
     const buf = fs.readFileSync(logoPath);
-    const logoW = 210;
-    const logoH = logoHeightForWidth(buf, logoW);
+    const dims = pngDimensions(buf);
+    const logoW = 132;
+    const logoH = dims ? (logoW * dims.height) / dims.width : 48;
     const logoX = (pageW - logoW) / 2;
     doc.image(logoPath, logoX, y, { width: logoW });
     y += logoH + 14;
@@ -147,22 +126,6 @@ function buildQuotationPDF({ items, customer }, callback) {
   doc.text(`• Visit: ${BUSINESS.address}`, margin, y, { width: contentW });
   y = doc.y + 8;
   doc.fillColor(THEME.muted).text('We will confirm availability and payment details.', margin, y, { width: contentW });
-
-  if (fs.existsSync(logoPath)) {
-    const buf = fs.readFileSync(logoPath);
-    const footerLogoW = 130;
-    const footerLogoH = logoHeightForWidth(buf, footerLogoW);
-    const footerY = doc.page.height - margin - footerLogoH;
-    const minFooterY = y + 24;
-    if (minFooterY < footerY - 8) {
-      doc.strokeColor(THEME.goldLine).opacity(0.45).lineWidth(0.75)
-        .moveTo(margin + contentW * 0.2, footerY - 12)
-        .lineTo(pageW - margin - contentW * 0.2, footerY - 12)
-        .stroke();
-      doc.opacity(1);
-      doc.image(logoPath, (pageW - footerLogoW) / 2, footerY, { width: footerLogoW });
-    }
-  }
 
   doc.end();
 }

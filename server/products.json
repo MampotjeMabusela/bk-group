@@ -29,7 +29,6 @@
   {"id":"28","name":"#28 Hydrade Vellies","description":"Leather Vellies","price":750,"originalPrice":null,"image":"/images/product-28.png","category":"vellies","sizes":[3,4,5,6,7,8]},
   {"id":"29","name":"#29 Hygrade Suede Vellies","description":"Blue Suede Vellies","price":659.99,"originalPrice":null,"image":"/images/product-29.png","category":"vellies","sizes":[4,5,6,7,8]},
   {"id":"30","name":"#30 Hygrade Suede Vellies","description":"Oak Suede Vellies","price":659.99,"originalPrice":null,"image":"/images/product-30.png","category":"vellies","sizes":[3,4,5,6,7,8]},
-  {"id":"31","name":"#31 Ladies Fur Boots","description":"Nubuck Leather size (5-9)","price":799.99,"originalPrice":null,"image":"/images/product-31.png","category":"boots","sizes":[5,6,7,8,9],"stockBySize":{"9":"out","7":"low"}},
-  {"id":"32","name":"#32 Ladies Fur Short Boots","description":"Nubuck Leather Shoes size (4-9)","price":699.99,"originalPrice":null,"image":"/images/product-32.png","category":"boots","sizes":[4,5,6,7,8,9]},
-  {"id":"33","name":"#33 Side Zipper Boots","description":"Nubuck Leather size (4-9)","price":899.99,"originalPrice":null,"image":"/images/product-33-1.png","images":["/images/product-33-1.png","/images/product-33-2.png","/images/product-33-3.png","/images/product-33-4.png"],"category":"boots","sizes":[4,5,6,7,8,9]}
+  {"id":"33","name":"#33 Side Zipper Boots","description":"Nubuck Leather size (4-9)","price":899.99,"originalPrice":null,"image":"/images/product-33-1.png","images":["/images/product-33-1.png","/images/product-33-2.png","/images/product-33-3.png","/images/product-33-4.png"],"category":"boots","sizes":[4,5,6,7,8,9]},
+  {"id":"34","name":"#34 Ladies Vellies","description":"Ladies suede Vellies with floral panels (size 4 to 8)","price":699.99,"originalPrice":null,"image":"/images/product-34.png","images":["/images/product-34.png"],"category":"vellies","sizes":[4,5,6,7,8]}
 ]
