@@ -533,6 +533,8 @@ function renderProducts() {
   if (deepId && filtered.some((p) => String(p.id) === String(deepId))) {
     scrollToProductCard(deepId);
   }
+
+  initProductCardMotion();
 }
 
 function getSelectedSize(productId) {
@@ -703,6 +705,67 @@ function handleCartPageClick(e) {
   else if (action === 'dec') addToCart(product, -1, size);
   else if (action === 'inc') addToCart(product, 1, size);
   renderCart();
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function initProductCardMotion() {
+  const grid = $('#productGrid');
+  if (!grid || prefersReducedMotion() || window.matchMedia('(hover: none)').matches) return;
+
+  $$('.product-card', grid).forEach((card) => {
+    if (card.dataset.tiltBound) return;
+    card.dataset.tiltBound = '1';
+
+    card.addEventListener('pointermove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      const rotateY = (px - 0.5) * 16;
+      const rotateX = (0.5 - py) * 12;
+      card.classList.add('is-tilting');
+      card.style.setProperty('--tilt-x', `${rotateX.toFixed(2)}deg`);
+      card.style.setProperty('--tilt-y', `${rotateY.toFixed(2)}deg`);
+      card.style.setProperty('--tilt-lift', '-12px');
+    });
+
+    card.addEventListener('pointerleave', () => {
+      card.classList.remove('is-tilting');
+      card.style.setProperty('--tilt-x', '0deg');
+      card.style.setProperty('--tilt-y', '0deg');
+      card.style.setProperty('--tilt-lift', '0px');
+    });
+  });
+}
+
+function initScrollMotion() {
+  if (prefersReducedMotion()) return;
+
+  const heroMedia = $('.hero-media');
+  const onScroll = () => {
+    if (heroMedia) {
+      const y = Math.min(window.scrollY, 480);
+      heroMedia.style.setProperty('--hero-parallax', `${(y * 0.28).toFixed(1)}px`);
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-inview');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.22, rootMargin: '0px 0px -8% 0px' }
+  );
+
+  $$('.craft-band, .testimonial-card').forEach((el) => observer.observe(el));
 }
 
 function setNavOpen(open) {
@@ -1122,6 +1185,9 @@ function init() {
     window.speechSynthesis.getVoices();
     document.addEventListener('DOMContentLoaded', () => window.speechSynthesis.getVoices());
   }
+
+  initScrollMotion();
+  initProductCardMotion();
 }
 
 init();
