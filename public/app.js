@@ -705,6 +705,15 @@ function handleCartPageClick(e) {
   renderCart();
 }
 
+function setNavOpen(open) {
+  const nav = $('#siteNav');
+  const toggle = $('#navToggle');
+  if (!nav || !toggle) return;
+  nav.classList.toggle('open', open);
+  toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+}
+
 function init() {
   applyUrlToShopControls();
   showPage(getPageIdFromUrl(), { skipUrlSync: true });
@@ -721,10 +730,16 @@ function init() {
     $('#main-content')?.focus({ preventScroll: true });
   });
 
+  $('#navToggle')?.addEventListener('click', () => {
+    const nav = $('#siteNav');
+    setNavOpen(!nav?.classList.contains('open'));
+  });
+
   document.addEventListener('click', (e) => {
     const link = e.target.closest('a[data-page]');
     if (link) {
       e.preventDefault();
+      setNavOpen(false);
       showPage(link.dataset.page);
     }
   });
