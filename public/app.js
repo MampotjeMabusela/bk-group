@@ -443,8 +443,18 @@ function renderProducts() {
 
   const deepId = getProductIdFromUrl();
 
+  const categoryLabels = {
+    vellies: 'Vellies',
+    'slip-on': 'Slip-Ons',
+    boots: 'Boots',
+    sandals: 'Sandals',
+  };
+
   grid.innerHTML = filtered.map((p, i) => {
-    const orig = p.originalPrice ? `<span class="product-original">${formatPrice(p.originalPrice)}</span>` : '';
+    const onSale = p.originalPrice != null && Number(p.originalPrice) > Number(p.price);
+    const orig = onSale ? `<span class="product-original">${formatPrice(p.originalPrice)}</span>` : '';
+    const catKey = (p.category || '').toLowerCase();
+    const catLabel = categoryLabels[catKey] || (p.category || 'Leather');
     const sizes = p.sizes && p.sizes.length ? p.sizes : [];
     let defaultSize = null;
     sizes.forEach((s) => {
@@ -498,15 +508,21 @@ function renderProducts() {
       String(p.id) === '21' ||
       String(p.id) === '22';
     const img0 = imgs[0] || '';
+    const badges = `
+          <div class="product-badges">
+            <span class="product-badge product-badge--cat">${escapeAttr(catLabel)}</span>
+            ${onSale ? '<span class="product-badge product-badge--sale">Sale</span>' : ''}
+          </div>`;
     const imageBlock = `
         <div class="product-image-wrap${imgs.length > 1 ? ' product-image-wrap--gallery' : ''}${fitContain ? ' product-image-wrap--contain' : ''}" data-product-gallery="${escapeAttr(p.id)}" data-images="${imagesAttr}" data-index="0" data-product-name="${escapeAttr(p.name)}">
+          ${badges}
           ${navHtml}
           <button type="button" class="gallery-zoom" data-gallery-open="${escapeAttr(p.id)}" aria-label="View larger: ${escapeAttr(p.name)}" title="Click to see full size">
             <img class="product-gallery-img" alt="${escapeAttr(p.name)}"${productImgAttrs(img0)} />
           </button>
         </div>`;
     return `
-      <li class="product-card" data-id="${p.id}" style="animation-delay: ${i * 0.05}s">
+      <li class="product-card product-card--${escapeAttr(catKey || 'leather')}${onSale ? ' product-card--sale' : ''}" data-id="${p.id}" data-category="${escapeAttr(catKey)}" style="animation-delay: ${i * 0.05}s">
         ${imageBlock}
         <div class="product-info">
           <div class="product-card-top">
@@ -516,6 +532,7 @@ function renderProducts() {
           <p class="product-desc">${p.description}</p>
           <div class="product-price-wrap">
             <span class="product-price">${formatPrice(p.price)}</span>${orig}
+            ${onSale ? '<span class="product-save">Save</span>' : ''}
           </div>
           ${sizeSelect}
           <div class="product-actions">
@@ -524,7 +541,7 @@ function renderProducts() {
               <span data-qty="${p.id}">${getCartQty(p.id)}</span>
               <button type="button" aria-label="Increase" data-action="inc" data-id="${p.id}">+</button>
             </div>
-            <button type="button" class="btn btn-primary btn-add" data-action="add" data-id="${p.id}">Add</button>
+            <button type="button" class="btn btn-primary btn-add" data-action="add" data-id="${p.id}">Add to cart</button>
           </div>
         </div>
       </li>`;
@@ -533,8 +550,6 @@ function renderProducts() {
   if (deepId && filtered.some((p) => String(p.id) === String(deepId))) {
     scrollToProductCard(deepId);
   }
-
-  initProductCardMotion();
 }
 
 function getSelectedSize(productId) {
@@ -624,21 +639,34 @@ function renderCart() {
   }
   empty.hidden = true;
   footer.hidden = false;
-  list.innerHTML = cart.map(item => `
-    <li class="cart-item" data-id="${item.id}" data-size="${item.size || ''}">
-      <img src="${item.image}" alt="${item.name}" />
-      <div>
-        <div class="cart-item-name">${item.name}${item.size ? ` (Size ${item.size})` : ''}</div>
-        <p class="cart-item-desc">${item.description}</p>
-        <div class="cart-item-qty">
-          <button type="button" data-cart="dec" data-id="${item.id}" data-size="${item.size || ''}">−</button>
-          <span>${item.quantity || 1}</span>
-          <button type="button" data-cart="inc" data-id="${item.id}" data-size="${item.size || ''}">+</button>
+  list.innerHTML = cart.map(item => {
+    const imgSrc = escapeAttr(item.image || (Array.isArray(item.images) && item.images[0]) || '');
+    const unit = formatPrice(item.price || 0);
+    const line = formatPrice((item.price || 0) * (item.quantity || 1));
+    return `
+    <li class="cart-item" data-id="${escapeAttr(item.id)}" data-size="${escapeAttr(item.size || '')}">
+      <div class="cart-item-media">
+        <img src="${imgSrc}" alt="${escapeAttr(item.name)}" loading="lazy" />
+      </div>
+      <div class="cart-item-info">
+        <div class="cart-item-top">
+          <h3 class="cart-item-name">${item.name}</h3>
+          ${item.size ? `<span class="cart-item-size">Size ${escapeAttr(item.size)}</span>` : ''}
+        </div>
+        <p class="cart-item-desc">${item.description || ''}</p>
+        <div class="cart-item-controls">
+          <div class="cart-item-qty">
+            <button type="button" aria-label="Decrease quantity" data-cart="dec" data-id="${escapeAttr(item.id)}" data-size="${escapeAttr(item.size || '')}">−</button>
+            <span>${item.quantity || 1}</span>
+            <button type="button" aria-label="Increase quantity" data-cart="inc" data-id="${escapeAttr(item.id)}" data-size="${escapeAttr(item.size || '')}">+</button>
+          </div>
+          <span class="cart-item-unit">${unit} each</span>
+          <button type="button" class="cart-item-remove" data-cart="remove" data-id="${escapeAttr(item.id)}" data-size="${escapeAttr(item.size || '')}">Remove</button>
         </div>
       </div>
-      <div class="cart-item-price">${formatPrice((item.price || 0) * (item.quantity || 1))}</div>
-      <button type="button" class="cart-item-remove" data-cart="remove" data-id="${item.id}" data-size="${item.size || ''}">Remove</button>
-    </li>`).join('');
+      <div class="cart-item-price">${line}</div>
+    </li>`;
+  }).join('');
 
   const total = cart.reduce((n, i) => n + (i.price || 0) * (i.quantity || 1), 0);
   $('#cartTotal').textContent = formatPrice(total);
@@ -705,67 +733,6 @@ function handleCartPageClick(e) {
   else if (action === 'dec') addToCart(product, -1, size);
   else if (action === 'inc') addToCart(product, 1, size);
   renderCart();
-}
-
-function prefersReducedMotion() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
-function initProductCardMotion() {
-  const grid = $('#productGrid');
-  if (!grid || prefersReducedMotion() || window.matchMedia('(hover: none)').matches) return;
-
-  $$('.product-card', grid).forEach((card) => {
-    if (card.dataset.tiltBound) return;
-    card.dataset.tiltBound = '1';
-
-    card.addEventListener('pointermove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width;
-      const py = (e.clientY - rect.top) / rect.height;
-      const rotateY = (px - 0.5) * 16;
-      const rotateX = (0.5 - py) * 12;
-      card.classList.add('is-tilting');
-      card.style.setProperty('--tilt-x', `${rotateX.toFixed(2)}deg`);
-      card.style.setProperty('--tilt-y', `${rotateY.toFixed(2)}deg`);
-      card.style.setProperty('--tilt-lift', '-12px');
-    });
-
-    card.addEventListener('pointerleave', () => {
-      card.classList.remove('is-tilting');
-      card.style.setProperty('--tilt-x', '0deg');
-      card.style.setProperty('--tilt-y', '0deg');
-      card.style.setProperty('--tilt-lift', '0px');
-    });
-  });
-}
-
-function initScrollMotion() {
-  if (prefersReducedMotion()) return;
-
-  const heroMedia = $('.hero-media');
-  const onScroll = () => {
-    if (heroMedia) {
-      const y = Math.min(window.scrollY, 480);
-      heroMedia.style.setProperty('--hero-parallax', `${(y * 0.28).toFixed(1)}px`);
-    }
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-inview');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.22, rootMargin: '0px 0px -8% 0px' }
-  );
-
-  $$('.craft-band, .testimonial-card').forEach((el) => observer.observe(el));
 }
 
 function setNavOpen(open) {
@@ -1185,9 +1152,6 @@ function init() {
     window.speechSynthesis.getVoices();
     document.addEventListener('DOMContentLoaded', () => window.speechSynthesis.getVoices());
   }
-
-  initScrollMotion();
-  initProductCardMotion();
 }
 
 init();

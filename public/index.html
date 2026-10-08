@@ -26,7 +26,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
@@ -60,27 +60,27 @@
       <section class="hero" aria-label="B & K Group introduction">
         <div class="hero-media" role="img" aria-label="Handmade leather sandals"></div>
         <div class="hero-veil" aria-hidden="true"></div>
-        <div class="hero-grain" aria-hidden="true"></div>
         <div class="hero-content">
-          <p class="hero-brand">B &amp; K Group</p>
-          <h1 class="hero-title">Leather that turns heads</h1>
-          <p class="hero-lead">Handmade vellies, boots, and sandals — genuine leather, proudly South African.</p>
-          <a href="#productGrid" class="btn btn-primary hero-cta">Explore the collection</a>
-        </div>
-      </section>
-
-      <section class="craft-band" aria-label="Why B & K Group">
-        <div class="craft-band-inner">
-          <h2 class="craft-band-title">Crafted for everyday confidence</h2>
-          <p class="craft-band-text">Browse the catalogue, pick your size, and get a free PDF quotation in minutes.</p>
+          <div class="hero-identity">
+            <img src="/images/logo.png" alt="" class="hero-logo" width="160" height="160" />
+            <div class="hero-wordmark">
+              <p class="hero-brand">B &amp; K Group</p>
+              <p class="hero-tagline">PHUSHA S'MOKOLO</p>
+            </div>
+          </div>
+          <h1 class="hero-title">Handmade leather footwear</h1>
+          <p class="hero-lead">Genuine leather vellies, boots, and sandals — crafted for comfort and strength.</p>
+          <div class="hero-actions">
+            <a href="#productGrid" class="btn btn-primary hero-cta">Shop the catalogue</a>
+            <a href="https://wa.me/27782376257" class="btn btn-hero-secondary hero-cta" target="_blank" rel="noopener noreferrer">WhatsApp us</a>
+          </div>
         </div>
       </section>
 
       <div class="shop-section" id="shopCatalogue">
         <header class="products-header">
           <div class="products-header-text">
-            <p class="shop-kicker">The collection</p>
-            <h2>Find your pair</h2>
+            <h2>Our Shoes</h2>
             <p class="shop-trust">Genuine leather · Made in South Africa · Free quotation</p>
           </div>
           <div class="shop-toolbar" role="search">
@@ -113,17 +113,52 @@
     </section>
 
     <section id="page-cart" class="page">
-      <div class="page-shell">
-        <h2>Your Cart</h2>
-        <div class="cart-empty" id="cartEmpty">Your cart is empty.</div>
-        <ul class="cart-list" id="cartList"></ul>
-        <div class="cart-footer" id="cartFooter" hidden>
-          <p class="cart-total">Total: <strong id="cartTotal">ZAR 0.00</strong></p>
-          <div class="cart-share-row" id="cartShareRow">
-            <a class="btn btn-secondary" id="cartShareWa" href="#" target="_blank" rel="noopener noreferrer">Send cart on WhatsApp</a>
-            <a class="btn btn-secondary" id="cartShareMail" href="#">Send cart by email</a>
+      <div class="page-shell cart-page">
+        <header class="cart-intro">
+          <p class="cart-eyebrow">Your selection</p>
+          <h2 class="section-title">Your Cart</h2>
+          <p class="section-subtitle">Review your shoes, then request a free quotation — no online payment required</p>
+          <ul class="cart-trust" aria-label="Cart benefits">
+            <li><strong>Free</strong><span>PDF quotation</span></li>
+            <li><strong>WhatsApp</strong><span>Easy follow-up</span></li>
+            <li><strong>Local</strong><span>Pretoria store</span></li>
+          </ul>
+        </header>
+
+        <div class="cart-layout">
+          <div class="cart-main">
+            <div class="cart-empty" id="cartEmpty">
+              <p class="cart-empty-title">Your cart is empty</p>
+              <p class="cart-empty-text">Browse the catalogue and add vellies, boots, sandals, or slip-ons when you’re ready.</p>
+              <a href="#" data-page="shop" class="btn btn-primary">Shop the catalogue</a>
+            </div>
+            <ul class="cart-list" id="cartList"></ul>
           </div>
-          <button type="button" class="btn btn-primary" id="checkoutBtn">Get quotation</button>
+
+          <aside class="cart-aside">
+            <div class="cart-footer" id="cartFooter" hidden>
+              <div class="cart-footer-header">
+                <h3>Order summary</h3>
+                <p>We’ll confirm stock and payment after your quotation.</p>
+              </div>
+              <p class="cart-total">Total <strong id="cartTotal">ZAR 0.00</strong></p>
+              <button type="button" class="btn btn-primary" id="checkoutBtn">Get quotation</button>
+              <div class="cart-share-row" id="cartShareRow">
+                <a class="btn btn-secondary" id="cartShareWa" href="#" target="_blank" rel="noopener noreferrer">WhatsApp cart</a>
+                <a class="btn btn-secondary" id="cartShareMail" href="#">Email cart</a>
+              </div>
+              <p class="cart-aside-note">Prefer to chat first? Message us on <a href="https://wa.me/27782376257" target="_blank" rel="noopener noreferrer">WhatsApp</a>.</p>
+            </div>
+            <div class="cart-aside-card" id="cartAsideHint">
+              <h3 class="cart-aside-title">How it works</h3>
+              <ol class="cart-steps">
+                <li>Add shoes and sizes to your cart</li>
+                <li>Download a free PDF quotation</li>
+                <li>Send it by email or WhatsApp</li>
+                <li>We confirm stock and payment</li>
+              </ol>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
@@ -173,108 +208,202 @@
     </section>
 
     <section id="page-testimonials" class="page">
-      <div class="page-shell">
-        <h2 class="section-title">Loved by customers</h2>
-        <p class="section-subtitle">Real stories from people who wear B &amp; K Group every day</p>
+      <div class="page-shell testimonials-page">
+        <header class="testimonials-intro">
+          <p class="testimonials-eyebrow">Customer stories</p>
+          <h2 class="section-title">What Our Customers Say</h2>
+          <p class="section-subtitle">Honest words from people who wear PHUSHA S'MOKOLO every day</p>
+          <ul class="testimonials-trust" aria-label="Customer highlights">
+            <li><strong>4.9</strong><span>Average rating</span></li>
+            <li><strong>Handmade</strong><span>Genuine leather</span></li>
+            <li><strong>Pretoria</strong><span>Local craftsmanship</span></li>
+          </ul>
+        </header>
+
         <div class="testimonials-grid" id="testimonialsGrid">
-          <article class="testimonial-card">
+          <article class="testimonial-card testimonial-card--featured">
+            <span class="testimonial-mark" aria-hidden="true">“</span>
             <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <blockquote class="testimonial-quote">The vellies I ordered fit perfectly and the leather quality is outstanding. Got my quotation the same day and delivery was quick. Will definitely order again.</blockquote>
+            <blockquote class="testimonial-quote">I collected my #1 AKA Vellies Tan from Moreleta Corner and they felt broken-in from day one—soft leather, solid stitching, zero pinch. WhatsApped my quotation in the morning and paid the same afternoon. Proper local quality.</blockquote>
             <footer class="testimonial-author">
-              <strong>Thabo M.</strong>
-              <span>Johannesburg</span>
+              <span class="testimonial-avatar" aria-hidden="true">KP</span>
+              <span class="testimonial-meta">
+                <strong>Kgomotso P.</strong>
+                <span>Centurion · AKA Vellies Tan</span>
+              </span>
             </footer>
           </article>
           <article class="testimonial-card">
+            <span class="testimonial-mark" aria-hidden="true">“</span>
             <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <blockquote class="testimonial-quote">Bought the genuine leather sandals for my mom—she loves them! Great value for money and true South African craftsmanship. Highly recommend B &amp; K Group.</blockquote>
+            <blockquote class="testimonial-quote">Bought the ladies Chelsea boots for work and weekends. Colour is rich, sole is grippy, and they still look new after weeks of daily wear. The team helped me pick the right size over WhatsApp—so easy.</blockquote>
             <footer class="testimonial-author">
-              <strong>Nomvula K.</strong>
-              <span>Pretoria</span>
+              <span class="testimonial-avatar" aria-hidden="true">AD</span>
+              <span class="testimonial-meta">
+                <strong>Ayanda D.</strong>
+                <span>Pretoria East · Chelsea boots</span>
+              </span>
             </footer>
           </article>
           <article class="testimonial-card">
+            <span class="testimonial-mark" aria-hidden="true">“</span>
             <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <blockquote class="testimonial-quote">My Chelsea boots are still going strong after a year. The team was helpful with sizing and the PDF quotation made ordering so easy. Professional from start to finish.</blockquote>
+            <blockquote class="testimonial-quote">Got the Filo leather sandals for summer braais and they are a hit. Comfortable straps, neat finish, and they don’t feel cheap like mall sandals. PHUSHA S'MOKOLO is the real deal.</blockquote>
             <footer class="testimonial-author">
-              <strong>David L.</strong>
-              <span>Cape Town</span>
+              <span class="testimonial-avatar" aria-hidden="true">SN</span>
+              <span class="testimonial-meta">
+                <strong>Sipho N.</strong>
+                <span>Johannesburg · Filo sandals</span>
+              </span>
             </footer>
           </article>
           <article class="testimonial-card">
-            <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <blockquote class="testimonial-quote">Finally found quality slip-ons that don’t break the bank. Fast response on WhatsApp and the shoes arrived well packed. PHUSHA S'MOKOLO delivers.</blockquote>
+            <span class="testimonial-mark" aria-hidden="true">“</span>
+            <div class="testimonial-stars" aria-label="4 out of 5 stars">★★★★☆</div>
+            <blockquote class="testimonial-quote">Safari Red Vellies arrived looking exactly like the photos. PDF quotation was clear, payment was simple, and packing was careful. Only wish I’d ordered a second colour while I was at it!</blockquote>
             <footer class="testimonial-author">
-              <strong>Lerato S.</strong>
-              <span>Durban</span>
+              <span class="testimonial-avatar" aria-hidden="true">Mv</span>
+              <span class="testimonial-meta">
+                <strong>Megan van Wyk</strong>
+                <span>Midrand · Safari Red Vellies</span>
+              </span>
             </footer>
           </article>
           <article class="testimonial-card">
+            <span class="testimonial-mark" aria-hidden="true">“</span>
             <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <blockquote class="testimonial-quote">Ordered Hydrade Vellies for the whole family. Beautiful finish and true to size. The quotation process was smooth and the team answered all my questions. Top service!</blockquote>
+            <blockquote class="testimonial-quote">Needed school-ready leather vellies for my kids and these held up through term one—scuffs wipe clean and the fit stayed true. Friendly service in-store at Moreleta Park. We’ll be back for winter boots.</blockquote>
             <footer class="testimonial-author">
-              <strong>Sarah N.</strong>
-              <span>Bloemfontein</span>
+              <span class="testimonial-avatar" aria-hidden="true">PM</span>
+              <span class="testimonial-meta">
+                <strong>Precious Mokoena</strong>
+                <span>Moreleta Park · Family vellies</span>
+              </span>
             </footer>
           </article>
+          <article class="testimonial-card">
+            <span class="testimonial-mark" aria-hidden="true">“</span>
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <blockquote class="testimonial-quote">Men’s olive leather vellies are stylish without trying too hard. Softened nicely after a few wears and pair with jeans or chinos. Ordering online with a WhatsApp follow-up felt personal, not automated.</blockquote>
+            <footer class="testimonial-author">
+              <span class="testimonial-avatar" aria-hidden="true">JR</span>
+              <span class="testimonial-meta">
+                <strong>Jason R.</strong>
+                <span>Sandton · Olive Vellies</span>
+              </span>
+            </footer>
+          </article>
+        </div>
+
+        <div class="testimonials-cta">
+          <p>Wearing B &amp; K Group shoes? We’d love to hear your story.</p>
+          <a href="#" data-page="feedback" class="btn btn-primary">Share your feedback</a>
         </div>
       </div>
     </section>
 
     <section id="page-feedback" class="page">
-      <div class="page-shell page-shell--narrow">
-        <h2 class="section-title">Send Us Your Feedback</h2>
-        <p class="section-subtitle">We’d love to hear from you—suggestions, reviews, or questions</p>
-        <form id="feedbackForm" class="feedback-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="feedbackName">Your name <span class="required">*</span></label>
-              <input type="text" id="feedbackName" name="name" required placeholder="e.g. John Smith" />
+      <div class="page-shell feedback-page">
+        <header class="feedback-intro">
+          <p class="feedback-eyebrow">We listen</p>
+          <h2 class="section-title">Send Us Your Feedback</h2>
+          <p class="section-subtitle">Share a review, suggestion, or question — every message helps us craft a better experience</p>
+          <ul class="feedback-trust" aria-label="How we respond">
+            <li><strong>1 day</strong><span>Typical reply time</span></li>
+            <li><strong>Private</strong><span>Handled with care</span></li>
+            <li><strong>Direct</strong><span>From our Pretoria team</span></li>
+          </ul>
+        </header>
+
+        <div class="feedback-layout">
+          <aside class="feedback-aside">
+            <div class="feedback-aside-card">
+              <h3 class="feedback-aside-title">Prefer to talk?</h3>
+              <p class="feedback-aside-text">Reach us the same way our customers do — quick, personal, and local.</p>
+              <ul class="feedback-aside-list">
+                <li>
+                  <span class="feedback-aside-label">WhatsApp</span>
+                  <a href="https://wa.me/27782376257" target="_blank" rel="noopener noreferrer">+27 78 237 6257</a>
+                </li>
+                <li>
+                  <span class="feedback-aside-label">Email</span>
+                  <a href="mailto:bandkgroupptyltd@outlook.com?subject=Feedback%20from%20B%20%26%20K%20Group%20website">bandkgroupptyltd@outlook.com</a>
+                </li>
+                <li>
+                  <span class="feedback-aside-label">Visit</span>
+                  <span>Moreleta Corner, Pretoria</span>
+                </li>
+              </ul>
+              <a href="#" data-page="testimonials" class="feedback-aside-link">Read customer stories →</a>
             </div>
-            <div class="form-group">
-              <label for="feedbackEmail">Email <span class="required">*</span></label>
-              <input type="email" id="feedbackEmail" name="email" required placeholder="you@example.com" />
+          </aside>
+
+          <form id="feedbackForm" class="feedback-form">
+            <div class="feedback-form-header">
+              <h3>Your message</h3>
+              <p>Fields marked <span class="required">*</span> are required</p>
             </div>
-          </div>
-          <div class="form-group form-group--rating">
-            <fieldset class="rating-fieldset">
-              <legend class="rating-legend">
-                Rating <span class="rating-legend-hint">(0 = lowest · 10 = highest)</span>
-              </legend>
-              <div class="rating-options">
-                <div class="rating-item"><input type="radio" name="rating" value="0" id="rating-0" /><label for="rating-0">0</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="1" id="rating-1" /><label for="rating-1">1</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="2" id="rating-2" /><label for="rating-2">2</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="3" id="rating-3" /><label for="rating-3">3</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="4" id="rating-4" /><label for="rating-4">4</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="5" id="rating-5" checked /><label for="rating-5">5</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="6" id="rating-6" /><label for="rating-6">6</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="7" id="rating-7" /><label for="rating-7">7</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="8" id="rating-8" /><label for="rating-8">8</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="9" id="rating-9" /><label for="rating-9">9</label></div>
-                <div class="rating-item"><input type="radio" name="rating" value="10" id="rating-10" /><label for="rating-10">10</label></div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="feedbackName">Your name <span class="required">*</span></label>
+                <input type="text" id="feedbackName" name="name" required placeholder="e.g. Thandi Molefe" autocomplete="name" />
               </div>
-            </fieldset>
-          </div>
-          <div class="form-group">
-            <label for="feedbackSubject">Subject</label>
-            <select id="feedbackSubject" name="subject">
-              <option value="general">General feedback</option>
-              <option value="product">Product review</option>
-              <option value="order">Order / delivery</option>
-              <option value="suggestion">Suggestion</option>
-              <option value="complaint">Complaint</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="feedbackMessage">Message <span class="required">*</span></label>
-            <textarea id="feedbackMessage" name="message" rows="5" required placeholder="Tell us what you think..."></textarea>
-          </div>
-          <div class="feedback-actions">
-            <button type="submit" class="btn btn-primary" id="feedbackSubmit">Send feedback</button>
-          </div>
-          <div class="feedback-message" id="feedbackMessageEl" role="status" aria-live="polite" hidden></div>
-        </form>
+              <div class="form-group">
+                <label for="feedbackEmail">Email <span class="required">*</span></label>
+                <input type="email" id="feedbackEmail" name="email" required placeholder="you@example.com" autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="form-group form-group--rating">
+              <fieldset class="rating-fieldset">
+                <legend class="rating-legend">
+                  How was your experience?
+                  <span class="rating-legend-hint">0 lowest · 10 highest</span>
+                </legend>
+                <div class="rating-scale">
+                  <span class="rating-scale-end">Low</span>
+                  <div class="rating-options">
+                    <div class="rating-item"><input type="radio" name="rating" value="0" id="rating-0" /><label for="rating-0">0</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="1" id="rating-1" /><label for="rating-1">1</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="2" id="rating-2" /><label for="rating-2">2</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="3" id="rating-3" /><label for="rating-3">3</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="4" id="rating-4" /><label for="rating-4">4</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="5" id="rating-5" checked /><label for="rating-5">5</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="6" id="rating-6" /><label for="rating-6">6</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="7" id="rating-7" /><label for="rating-7">7</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="8" id="rating-8" /><label for="rating-8">8</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="9" id="rating-9" /><label for="rating-9">9</label></div>
+                    <div class="rating-item"><input type="radio" name="rating" value="10" id="rating-10" /><label for="rating-10">10</label></div>
+                  </div>
+                  <span class="rating-scale-end">High</span>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <label for="feedbackSubject">Subject</label>
+              <select id="feedbackSubject" name="subject">
+                <option value="general">General feedback</option>
+                <option value="product">Product review</option>
+                <option value="order">Order / delivery</option>
+                <option value="suggestion">Suggestion</option>
+                <option value="complaint">Complaint</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="feedbackMessage">Message <span class="required">*</span></label>
+              <textarea id="feedbackMessage" name="message" rows="6" required placeholder="Tell us about your shoes, service, or ideas for improvement…"></textarea>
+            </div>
+
+            <div class="feedback-actions">
+              <button type="submit" class="btn btn-primary" id="feedbackSubmit">Send feedback</button>
+              <p class="feedback-privacy-note">We only use your details to respond — never for spam.</p>
+            </div>
+            <div class="feedback-message" id="feedbackMessageEl" role="status" aria-live="polite" hidden></div>
+          </form>
+        </div>
       </div>
     </section>
 
@@ -396,53 +525,79 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <a href="#" data-page="shop" class="footer-logo-link" aria-label="B & K Group home">
-        <img src="/images/logo.png" alt="B & K Group – PHUSHA S'MOKOLO" class="footer-logo-img" loading="lazy" />
-      </a>
-      <div class="footer-contact">
-        <p class="footer-address">
-          <span class="footer-label">Address</span>
-          Moreleta Corner, Cnr Garsfontein Rd &amp; Rubenstain Dr,<br />
-          Moreleta Park, Pretoria
-        </p>
-        <p class="footer-email">
-          <span class="footer-label">Email</span>
-          <a
-            class="footer-email-main"
-            href="mailto:bandkgroupptyltd@outlook.com?subject=Enquiry%20from%20B%20%26%20K%20Group%20website"
-            >bandkgroupptyltd@outlook.com</a>
-          <span class="footer-email-hint">Opens your default mail app.</span>
-          <span class="footer-email-web-label">Or compose in browser:</span>
-          <span class="footer-email-web">
-            <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=bandkgroupptyltd@outlook.com&amp;su=Enquiry%20from%20B%20%26%20K%20Group%20website" target="_blank" rel="noopener noreferrer">Gmail</a>
-            <span class="footer-email-web-sep" aria-hidden="true">·</span>
-            <a href="https://outlook.live.com/mail/0/deeplink/compose?to=bandkgroupptyltd@outlook.com" target="_blank" rel="noopener noreferrer">Outlook</a>
-            <span class="footer-email-web-sep" aria-hidden="true">·</span>
-            <a href="https://outlook.office.com/mail/deeplink/compose?to=bandkgroupptyltd@outlook.com" target="_blank" rel="noopener noreferrer">Outlook (work)</a>
-            <span class="footer-email-web-sep" aria-hidden="true">·</span>
-            <a href="https://compose.mail.yahoo.com/?to=bandkgroupptyltd@outlook.com" target="_blank" rel="noopener noreferrer">Yahoo Mail</a>
-          </span>
-        </p>
-        <p class="footer-phone">
-          <span class="footer-label">Phone</span>
-          <span class="footer-phone-row">
-            <a href="tel:+27782376257">+27 78 237 6257</a>
-            <a
-              href="https://wa.me/27782376257"
-              class="footer-whatsapp-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Chat with B & K Group on WhatsApp"
-              title="Chat on WhatsApp"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path fill="currentColor" d="M12 2C6.49 2 2 6.31 2 11.62c0 1.86.57 3.66 1.64 5.2L2.5 22l5.37-1.09a10.2 10.2 0 0 0 4.13.86c5.51 0 10-4.31 10-9.62S17.51 2 12 2m0 18.2a8.1 8.1 0 0 1-3.96-1.02l-.29-.17-3.19.65.69-3.02-.19-.3a7.86 7.86 0 0 1-1.23-4.22c0-4.4 3.66-7.98 8.17-7.98s8.17 3.58 8.17 7.98-3.66 7.98-8.17 7.98m4.48-5.95c-.25-.12-1.46-.7-1.69-.78s-.4-.12-.57.12-.65.78-.8.95-.29.18-.53.06c-.25-.12-1.03-.37-1.96-1.18-.72-.63-1.21-1.4-1.35-1.64s-.01-.37.11-.49c.11-.11.25-.29.37-.43s.16-.24.24-.4.04-.3-.02-.43-.57-1.33-.78-1.82c-.2-.48-.41-.41-.57-.41h-.48c-.16 0-.43.06-.65.3s-.86.84-.86 2.05.88 2.39 1 2.55 1.72 2.61 4.17 3.66c.58.25 1.04.4 1.39.51.59.18 1.12.15 1.54.09.47-.07 1.46-.6 1.67-1.19.21-.58.21-1.08.15-1.19s-.22-.18-.47-.31" />
-              </svg>
-            </a>
-          </span>
-        </p>
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a href="#" data-page="shop" class="footer-logo-link" aria-label="B & K Group home">
+            <img src="/images/logo.png" alt="B & K Group – PHUSHA S'MOKOLO" class="footer-logo-img" loading="lazy" />
+            <span class="footer-brand-text">
+              <span class="footer-brand-name">B &amp; K Group</span>
+              <span class="footer-brand-tag">PHUSHA S'MOKOLO</span>
+            </span>
+          </a>
+          <p class="footer-brand-lead">Handmade leather footwear · Made in South Africa</p>
+        </div>
+
+        <div class="footer-columns">
+          <div class="footer-col">
+            <h3 class="footer-label">Visit</h3>
+            <p class="footer-text">
+              Moreleta Corner<br />
+              Cnr Garsfontein Rd &amp; Rubenstain Dr<br />
+              Moreleta Park, Pretoria
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h3 class="footer-label">Contact</h3>
+            <ul class="footer-list">
+              <li>
+                <a
+                  class="footer-email-main"
+                  href="mailto:bandkgroupptyltd@outlook.com?subject=Enquiry%20from%20B%20%26%20K%20Group%20website"
+                  >bandkgroupptyltd@outlook.com</a>
+              </li>
+              <li class="footer-phone-row">
+                <a href="tel:+27782376257">+27 78 237 6257</a>
+                <a
+                  href="https://wa.me/27782376257"
+                  class="footer-whatsapp-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Chat with B & K Group on WhatsApp"
+                  title="Chat on WhatsApp"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path fill="currentColor" d="M12 2C6.49 2 2 6.31 2 11.62c0 1.86.57 3.66 1.64 5.2L2.5 22l5.37-1.09a10.2 10.2 0 0 0 4.13.86c5.51 0 10-4.31 10-9.62S17.51 2 12 2m0 18.2a8.1 8.1 0 0 1-3.96-1.02l-.29-.17-3.19.65.69-3.02-.19-.3a7.86 7.86 0 0 1-1.23-4.22c0-4.4 3.66-7.98 8.17-7.98s8.17 3.58 8.17 7.98-3.66 7.98-8.17 7.98m4.48-5.95c-.25-.12-1.46-.7-1.69-.78s-.4-.12-.57.12-.65.78-.8.95-.29.18-.53.06c-.25-.12-1.03-.37-1.96-1.18-.72-.63-1.21-1.4-1.35-1.64s-.01-.37.11-.49c.11-.11.25-.29.37-.43s.16-.24.24-.4.04-.3-.02-.43-.57-1.33-.78-1.82c-.2-.48-.41-.41-.57-.41h-.48c-.16 0-.43.06-.65.3s-.86.84-.86 2.05.88 2.39 1 2.55 1.72 2.61 4.17 3.66c.58.25 1.04.4 1.39.51.59.18 1.12.15 1.54.09.47-.07 1.46-.6 1.67-1.19.21-.58.21-1.08.15-1.19s-.22-.18-.47-.31" />
+                  </svg>
+                  <span>WhatsApp</span>
+                </a>
+              </li>
+            </ul>
+            <div class="footer-email-web" aria-label="Compose email in browser">
+              <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=bandkgroupptyltd@outlook.com&amp;su=Enquiry%20from%20B%20%26%20K%20Group%20website" target="_blank" rel="noopener noreferrer">Gmail</a>
+              <a href="https://outlook.live.com/mail/0/deeplink/compose?to=bandkgroupptyltd@outlook.com" target="_blank" rel="noopener noreferrer">Outlook</a>
+              <a href="https://outlook.office.com/mail/deeplink/compose?to=bandkgroupptyltd@outlook.com" target="_blank" rel="noopener noreferrer">Work</a>
+              <a href="https://compose.mail.yahoo.com/?to=bandkgroupptyltd@outlook.com" target="_blank" rel="noopener noreferrer">Yahoo</a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h3 class="footer-label">Explore</h3>
+            <ul class="footer-list">
+              <li><a href="#" data-page="shop">Shop</a></li>
+              <li><a href="#" data-page="testimonials">Testimonials</a></li>
+              <li><a href="#" data-page="feedback" class="footer-feedback-link">Leave feedback</a></li>
+              <li><a href="#" data-page="privacy" class="footer-privacy-link">Privacy</a></li>
+              <li><a href="#" data-page="terms" class="footer-terms-link">Terms &amp; Conditions</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <p class="footer-copy">© B &amp; K Group · PHUSHA S'MOKOLO · <a href="#" data-page="feedback" class="footer-feedback-link">Leave feedback</a> · <a href="#" data-page="privacy" class="footer-privacy-link">Privacy</a> · <a href="#" data-page="terms" class="footer-terms-link">Terms &amp; Conditions</a><br /><span class="footer-developer">Developed by Mampotje Mabusela</span></p>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© B &amp; K Group · PHUSHA S'MOKOLO</p>
+        <p class="footer-developer">Developed by Mampotje Mabusela</p>
+      </div>
     </div>
   </footer>
 

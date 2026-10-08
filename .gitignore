@@ -18,3 +18,5 @@ Thumbs.db
 
 # Runtime feedback store (local / server)
 server/feedback.json
+
+.vercel
